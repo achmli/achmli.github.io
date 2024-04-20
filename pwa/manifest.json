@@ -1,13 +1,13 @@
 {
-  "name": "Hux Blog",
-  "short_name": "Hux Blog",
-  "description": "About an engineer & designer who loves web.",
+  "name": "ENS Blog",
+  "short_name": "ENS Blog",
+  "description": "go to dmc!!!!!!",
   "icons": [{
-    "src": "icons/128.png",
+    "src": "icons/icon.png",
     "sizes": "128x128",
     "type": "image/png"
   }, {
-    "src": "icons/512.png",
+    "src": "icons/icon.png",
     "sizes": "512x512",
     "type": "image/png"
   }],
