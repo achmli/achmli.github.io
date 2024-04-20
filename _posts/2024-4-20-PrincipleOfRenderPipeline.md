@@ -84,7 +84,7 @@ Swapchain是扩展功能，而不是核心渲染功能，因为输出到屏幕�
 + 视口
   <img src="https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Pics-Games106/ViewPort.png" style="zoom:75%" />
 
-  <img src="https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Pics-Games106/ViewPort2.png" style="zoom:75%" />
+  <img src="https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Pics-Games106/Viewport2.png" style="zoom:75%" />
 + Scissor
 
  
