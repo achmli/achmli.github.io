@@ -11,7 +11,7 @@ tags:
 ---
 
 # 传统RHI和现代RHI的区别
-<img src="https://raw.githubusercontent.com/achmli/achmli.github.io/master/Pics-Games106/Differ.png" style="zoom:75%" />
+<img src="https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Pics-Games106/Differ.png" style="zoom:75%" />
 
 主要是PPT中这些。
 传统的RHI都是状态机的模式，OpenGL的Context是隐式的，DX的Context是显式的，这个模式使得许多内容对程序员透明，内部无法感知外部的修改，可能在资源的调用上出现错误。
@@ -83,11 +83,13 @@ Swapchain是扩展功能，而不是核心渲染功能，因为输出到屏幕�
   <img src="https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Pics-Games106/States.png" style="zoom:75%" />
 + 视口
   <img src="https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Pics-Games106/ViewPort.png" style="zoom:75%" />
+
   <img src="https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Pics-Games106/ViewPort2.png" style="zoom:75%" />
 + Scissor
 
  
-<img src="https://raw.githubusercontent.com/achmli/achmli.github.io/img/Pics-Games106/Scissor.png" style="zoom:75%" />
+<img src="https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Pics-Games106/Scissor.png" style="zoom:75%" />
+
 
 ### 片段着色器
 
