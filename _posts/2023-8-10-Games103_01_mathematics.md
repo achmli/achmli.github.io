@@ -28,7 +28,7 @@ stacked vector：向量可以叠成一个高维的向量，常用来表示一个
 
 ![LinearAdd](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/01/LinearAdd.png)
 
-**p**(t)=(1-t)__p__+t__q__ 是**p**和**q**插值，权重是t。
+<strong>p</strong>(t)=(1-t)<strong>p</strong>+t<strong>q</strong> 是<strong>p</strong>和<strong>q</strong>插值，权重是t。
 
 ## 矢量大小
 
@@ -40,7 +40,7 @@ stacked vector：向量可以叠成一个高维的向量，常用来表示一个
 
 ![VecDotProduct](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/01/VecDotProduct.png)
 
-出了图中两种表示方法，还可以用<__p__,__q__>表示。
+出了图中两种表示方法，还可以用<<strong>p</strong>,<strong>q</strong>>表示。
 
 ### 平面的表示
 
@@ -48,11 +48,11 @@ stacked vector：向量可以叠成一个高维的向量，常用来表示一个
 
 给定法向量，并且规定法向量的方向就是朝上的方向。
 
-法向量与平面的交点是**c**，取任一点**p**，求(**p**-**c**)***n**的值，即__p__-__c__在方向n上的投影长度 *s*。
+法向量与平面的交点是<strong>c</strong>，取任一点<strong>p</strong>，求(<strong>p</strong>-<strong>c</strong>)*<strong>n</strong>的值，即<strong>p</strong>-<strong>c</strong>在方向n上的投影长度 *s*。
 
-如果s>0，__p__点的位置高于平面。
-如果s=0，__p__点的是位于平面上的点。
-如梭s<0，__p__点的位置低于平面。
+如果s>0，<strong>p</strong>点的位置高于平面。
+如果s=0，<strong>p</strong>点的是位于平面上的点。
+如梭s<0，<strong>p</strong>点的位置低于平面。
 
 同时所有满足s=0的点，构成了平面。可以用这种方法定义平面。
 
@@ -60,9 +60,9 @@ stacked vector：向量可以叠成一个高维的向量，常用来表示一个
 
 ![ParticleSphereCollision](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/01/ParticleSphereCollision.png)
 
-总之就是向量**p**上存在一点，使得**p**(*t*)与**c**的距离等于半径*r*，从而进一步联立方程，而有没有解有几个解就是中学数学了。
+总之就是向量<strong>p</strong>上存在一点，使得<strong>p</strong>(<em>t</em>)与<strong>c</strong>的距离等于半径<em>r</em>，从而进一步联立方程，而有没有解有几个解就是中学数学了。
 
-~~实际上一直很好奇为什么不通过*t*=(**c**-**p**)**∙**__v__求出来与**v**正交的向量(**p**(*t*)-**c**)，用它的长度和*r*作比较来判断是否相交，从games101就开始好奇，实际上是从*Ray Tracing In One Weekend*开始好奇的，因为games101第一次看的时候根本没有认真学~~
+~~实际上一直很好奇为什么不通过<em>t</em>=(<strong>c</strong>-<strong>p</strong>)<strong>∙</strong><strong>v</strong>求出来与<strong>v</strong>正交的向量(<strong>p</strong>(<em>t</em>)-<strong>c</strong>)，用它的长度和<em>r</em>作比较来判断是否相交，从games101就开始好奇，实际上是从<em>Ray Tracing In One Weekend</em>开始好奇的，因为games101第一次看的时候根本没有认真学~~
 
 ## 叉乘
 
@@ -81,7 +81,7 @@ stacked vector：向量可以叠成一个高维的向量，常用来表示一个
 
 ![Quiz](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/01/Quiz.png)
 
-叉乘为**0**就是在一条线上嘛。。。
+叉乘为<strong>0</strong>就是在一条线上嘛。。。
 
 ### 点在三角形的内外
 
@@ -91,7 +91,7 @@ _Games101_就提过还写过作业，就当复习吧，实际上就是三次叉�
 
 ![InsideOrOutsideTriangle2](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/01/InsideOrOutsideTriangle2.png)
 
-不过点乘个**n**也很合理，毕竟判断数字正负还是更简单。
+不过点乘个<strong>n</strong>也很合理，毕竟判断数字正负还是更简单。
 
 ### 重心坐标
 
@@ -119,7 +119,7 @@ Gouraud着色通过三角形顶点的颜色的插值获得像素的颜色。
 
 ![ParticlePlaneIntersection](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/01/ParticlePlaneIntersection.png)
 
-*Games101*里使用的是MT算法，给定平面上任意三个能组成三角形的点，可以解出t和交点的重心坐标，并可以借由重心坐标判断交点是否在三角形内。
+<em>Games101</em>里使用的是MT算法，给定平面上任意三个能组成三角形的点，可以解出t和交点的重心坐标，并可以借由重心坐标判断交点是否在三角形内。
 
 ![MollerTrumbore](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games101/06/image-20230626215502683-2.png)
 
@@ -161,7 +161,7 @@ Gouraud着色通过三角形顶点的颜色的插值获得像素的颜色。
 
 ![EigenValue](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/01/EigenValue.png)
 
-特征值分解是奇异值分解的特殊情况，矩阵**U**不仅是正交矩阵，同时也应该是对称矩阵。
+特征值分解是奇异值分解的特殊情况，矩阵<strong>U</strong>不仅是正交矩阵，同时也应该是对称矩阵。
 
 ### 对称正定性
 
@@ -181,7 +181,7 @@ s.p.d.必然是可逆的。
 
 许多数值问题最终要解一个线性系统。
 
-求解**A**<sup>-1</sup>的代价是是很大的，尤其当是**A**巨大又稀疏所以不能简单地通过求逆来求解。
+求解<strong>A</strong><sup>-1</sup>的代价是是很大的，尤其当是<strong>A</strong>巨大又稀疏所以不能简单地通过求逆来求解。
 
 ## Direct Linear Solver
 
@@ -189,31 +189,31 @@ s.p.d.必然是可逆的。
 
 基于LU分解，或者是它的变种。主要区别在于占用内存。LU分解一般是最占内存的，然后是LDL<sup>T</sup> , Cholesky一般最节省内存。
 
-LU分解：将矩阵分解成**L**和**U**两部分。分别只有下半三角和上半个三角。
+LU分解：将矩阵分解成<strong>L</strong>和<strong>U</strong>两部分。分别只有下半三角和上半个三角。
 
-第一步通过下三角矩阵求解**Ly=b**，从上往下解出向量**y**
-第二步通过上三角矩阵求解**Ux=y**，从下往上求出最终的解**x**
+第一步通过下三角矩阵求解<strong>Ly=b</strong>，从上往下解出向量<strong>y</strong>
+第二步通过上三角矩阵求解<strong>Ux=y</strong>，从下往上求出最终的解<strong>x</strong>
 
-~~那么问题来了，**b**是从哪来的？~~
+~~那么问题来了，<strong>b</strong>是从哪来的？~~
 
-哦，**b**就是原来原来线性方程的常量，由于是线性，可以先通过下三角矩阵求出中间解，然后再通过中间解和上三角矩阵最终求得**x**。
+哦，<strong>b</strong>就是原来原来线性方程的常量，由于是线性，可以先通过下三角矩阵求出中间解，然后再通过中间解和上三角矩阵最终求得<strong>x</strong>。
 
 ![DLS](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/01/DLS.png)
 
-+ 如果**A**是稀疏的，那么**L**和**U**不是稀疏的。它们的稀疏性取决于排列。
++ 如果<strong>A</strong>是稀疏的，那么<strong>L</strong>和<strong>U</strong>不是稀疏的。它们的稀疏性取决于排列。
 + 计算由两部分构成：
 
 1. 分解
 2. 求解
 
-+ 如果必须要用相同的**A**求解许多个线性系统，那么分解只需要做一次，尽管求解依然要进行许多次。
++ 如果必须要用相同的<strong>A</strong>求解许多个线性系统，那么分解只需要做一次，尽管求解依然要进行许多次。
 + 不容易用并行运算。(但不是不行，比如Intel MKL PARDISO库)。
 
 ## Iterative Linear Solver(迭代法)
 
 迭代法通常的形式：$\mathbf{x}^{[k+1]}=\mathbf{x}^{[k]}+\alpha\mathbf{M^{-1}}(\mathbf{b-Ax}^{[k]})$
 
-其中**x**<sup>[k+1]</sup>为这一次迭代的结果，**x**<sup>[k]</sup>为上一次迭代的结果，α是系数，**M**<sup>-1</sup>是迭代矩阵，**b-Ax**<sup>[k]</sup>是残差，即上一次迭代的结果与最终结果之间的误差。
+其中<strong>x</strong><sup>[k+1]</sup>为这一次迭代的结果，<strong>x</strong><sup>[k]</sup>为上一次迭代的结果，α是系数，<strong>M</strong><sup>-1</sup>是迭代矩阵，<strong>b-Ax</strong><sup>[k]</sup>是残差，即上一次迭代的结果与最终结果之间的误差。
 
 ![IterativeLinearSolver](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/01/IterativeLinearSolver.png)
 
@@ -223,8 +223,8 @@ spectral radius：谱半径，绝对值最大的特征值。
 
 **M**必须是容易求解的
 
-1. Jacobi方法：**A**的对角矩阵
-2. Gauss-Seidel方法：**A**的下三角矩阵。
+1. Jacobi方法：<strong>A</strong>的对角矩阵
+2. Gauss-Seidel方法：<strong>A</strong>的下三角矩阵。
 
 ### 迭代法的优点
 
@@ -245,7 +245,7 @@ spectral radius：谱半径，绝对值最大的特征值。
 
 对矢量求导等于对x、y、z的每一项求导。横着写是偏微分，竖着写是梯度。
 
-对于上升的*f*，梯度是最陡峭的方向，与等值面(等高线？)垂直。
+对于上升的<em>f</em>，梯度是最陡峭的方向，与等值面(等高线？)垂直。
 
 ![TensorCalc2](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/01/TensorCalc2.png)
 
