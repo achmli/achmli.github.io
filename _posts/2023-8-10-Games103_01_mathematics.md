@@ -48,7 +48,7 @@ stacked vector：向量可以叠成一个高维的向量，常用来表示一个
 
 给定法向量，并且规定法向量的方向就是朝上的方向。
 
-法向量与平面的交点是<strong>c</strong>，取任一点<strong>p</strong>，求(<strong>p</strong>-<strong>c</strong>)*<strong>n</strong>的值，即<strong>p</strong>-<strong>c</strong>在方向n上的投影长度 *s*。
+法向量与平面的交点是<strong>c</strong>，取任一点<strong>p</strong>，求(<strong>p</strong>-<strong>c</strong>)*<strong>n</strong>的值，即<strong>p</strong>-<strong>c</strong>在方向n上的投影长度 <em>s</em>。
 
 如果s>0，<strong>p</strong>点的位置高于平面。
 如果s=0，<strong>p</strong>点的是位于平面上的点。
