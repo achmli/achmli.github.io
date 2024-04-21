@@ -87,7 +87,7 @@ stacked vector：向量可以叠成一个高维的向量，常用来表示一个
 
 ![InsideOrOutsideTriangle](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/01/InsideOrOutsideTriangle.png)
 
-_Games101_就提过还写过作业，就当复习吧，实际上就是三次叉乘的方向全都相同就在三角形内，而假如有一次与另外两次方向相反，那么就在三角形外面。
+<em>Games101</em>就提过还写过作业，就当复习吧，实际上就是三次叉乘的方向全都相同就在三角形内，而假如有一次与另外两次方向相反，那么就在三角形外面。
 
 ![InsideOrOutsideTriangle2](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/01/InsideOrOutsideTriangle2.png)
 
