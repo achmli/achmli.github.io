@@ -42,6 +42,12 @@ stacked vector：向量可以叠成一个高维的向量，常用来表示一个
 
 出了图中两种表示方法，还可以用< **p**,<strong>q</strong> >表示。
 
+### 投影
+
+![Projection](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/01/Projection.png)
+
+向量投影的长度很容易计算，图中<strong>oq</strong>的模与两个向量的夹角的余弦值相乘就可以得出答案。投影点的计算也就只需要图中最后的式子就能计算。
+
 ### 平面的表示
 
 ![Plane](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/01/Plane.png)
