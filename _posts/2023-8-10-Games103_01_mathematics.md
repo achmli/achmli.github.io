@@ -40,7 +40,7 @@ stacked vector：向量可以叠成一个高维的向量，常用来表示一个
 
 ![VecDotProduct](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/01/VecDotProduct.png)
 
-出了图中两种表示方法，还可以用< <strong>p</strong>,<strong>q</strong> >表示。
+出了图中两种表示方法，还可以用< **p**,<strong>q</strong> >表示。
 
 ### 平面的表示
 
