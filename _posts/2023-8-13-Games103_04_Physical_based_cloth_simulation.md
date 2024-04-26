@@ -98,7 +98,7 @@ tags:
 
 <center>$F(\mathbf{x})=\frac{1}{2\triangle t^2}\vert \lvert \mathbf{x-x^{[0]}}-\triangle t\mathbf{v^{[0]}}\rvert \rvert^{2}_{\mathbf{M}}+E(\mathbf{x})$</center>
 
-其中$\lvert \lvert \mathbf{x}\rvert \rvert|^2_{\mathbf M}$这个格式代表了<strong>x<sup>T</sup>Mx</strong>。
+其中$\lvert \lvert \mathbf{x}\rvert \rvert^2_{\mathbf M}$这个格式代表了<strong>x<sup>T</sup>Mx</strong>。
 
 <strong>M</strong>是质量矩阵，一般来说是一个对角矩阵。是一个3N*3N的矩阵。
 
