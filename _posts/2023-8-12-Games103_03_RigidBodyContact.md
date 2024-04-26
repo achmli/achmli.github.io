@@ -28,7 +28,7 @@ tags:
 
 如果是球，距离函数<em>Φ</em>(<strong>X</strong>)=<strong>||x-c||</strong>-<em>r</em>，即<strong>x</strong>与圆心的距离减去半径，得到的值就是带符号的距离
 
-如果是圆柱，距离函数$\phi(\mathbf{x})=\sqrt{||\mathbf{x-p}||^2-(\mathbf{(x-p)\cdot n})^2}-r$，根号内求的是<strong>x</strong>到圆柱中心轴的距离<strong>||x-p||</strong>是斜边长度<strong>(x-p)·n</strong>是<strong>(x-p)</strong>在中心轴上投影的长度，利用勾股定理，就可以求得<strong>x</strong>到中心轴的距离，再减去半径r得到的值就是带符号的与曲面的距离。
+如果是圆柱，距离函数$ \phi(\mathbf{x})=\sqrt{||\mathbf{x-p}||^2-(\mathbf{(x-p)\cdot n})^2}-r $，根号内求的是<strong>x</strong>到圆柱中心轴的距离<strong>||x-p||</strong>是斜边长度<strong>(x-p)·n</strong>是<strong>(x-p)</strong>在中心轴上投影的长度，利用勾股定理，就可以求得<strong>x</strong>到中心轴的距离，再减去半径r得到的值就是带符号的与曲面的距离。
 
 ![image-20230717223822423](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/03/image-20230717223822423.png)
 
