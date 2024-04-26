@@ -116,9 +116,9 @@ tags:
 在旋转中等效于质量的物理量成为惯性(还是惰性？Inertia)，用<strong>I</strong>表示。
 
 Inertia是一个矩阵，首先计算出在旋转前(Reference)状态下的矩阵。
-$$
-\mathbf{I_{ref}=\sum{m_i(\mathbf{r^T_{i}r_{i}1-r_{i}r^T_i})}}
-$$
+
+<center>$\mathbf{I_{ref}=\sum{m_i(\mathbf{r^T_{i}r_{i}1-r_{i}r^T_i})}}$</center>
+
 m<sub>i</sub>是质点的质量？ <strong>1</strong>是单位矩阵。
 
 然后计算旋转后的Inertia。<strong>I=RI<sub>ref</sub>R<sup>T</sup></strong>
@@ -156,6 +156,5 @@ m<sub>i</sub>是质点的质量？ <strong>1</strong>是单位矩阵。
 与质量的不同在于，inertia不是一个常量。
 
 ![image-20230717214323716](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/02/image-20230717214323716.png)
-$$
-\mathbf{I_{ref}=\sum{m_i(\mathbf{r^T_{i}r_{i}1-r_{i}r^T_i})}}
-$$
+
+<center>$\mathbf{I_{ref}=\sum{m_i(\mathbf{r^T_{i}r_{i}1-r_{i}r^T_i})}}$</center>
