@@ -100,7 +100,7 @@ Penalty方法是当距离函数小于0时，在下一次刷新施加一个与“
 
 法线方向：$\mathbf{v_N^{new}}\leftarrow - \mu_N\mathbf{v_N}$，法线方向的分量刷新时需要乘上一个负的系数，由于要符合能量守恒，所以<em>μ</em><sub>N</sub>一般在0到1之间
 
-垂直法线方向：$\mathbf{v_T^new}\leftarrow a\mathbf{v_T}$，切线方向的分量只需要乘上一个正的系数，是摩擦导致的切方向的衰减。a的求解应该符合库仑定律，$a\leftarrow max(1-\mu _\mathbf{T}(1+\mu_\mathbf{N})\mathbf{\lvert \lvert v_N \rvert \rvert / \lvert \lvert v_T \rvert \rvert},0)$，<em>μ<sub>T</sub></em>应该是摩擦系数之类的值。
+垂直法线方向：$\mathbf{v_T^new}\leftarrow a\mathbf{v_T}$，切线方向的分量只需要乘上一个正的系数，是摩擦导致的切方向的衰减。a的求解应该符合库仑定律，$ a\leftarrow max(1-\mu\_\mathbf{T}(1+\mu\_\mathbf{N})\mathbf{\lvert \lvert v_N \rvert \rvert / \lvert \lvert v_T \rvert \rvert},0) $，<em>μ<sub>T</sub></em>应该是摩擦系数之类的值。
 
 # 刚体碰撞
 
