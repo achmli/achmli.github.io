@@ -14,7 +14,7 @@ tags:
 
 # 碰撞检测
 
-![image-20230725174545598](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/07/image-20230725174545598.png)
+![image-20230725174545598](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/07/Pipeline.png)
 
 碰撞检测的管线。
 
@@ -28,23 +28,23 @@ tags:
 
 ## Spatial Partition(空间划分)
 
-![image-20230725192410376](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/07/Pipeline.png)
+![image-20230725192410376](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/07/SpatialPartition.png)
 
 空间划分是指将空间划分成网格，并且把三角形存储在网格中。比如t<sub>0</sub>同时存储在0，4，5号网格中。
 
 然后判断三角形是否有可能碰撞，只需要检测三角形所在网格中是否存储了其他三角形。
 
-![image-20230725193224875](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/07/SpatialPartition.png)
+![image-20230725193224875](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/07/SpatialPartition2.png)
 
 运动的三角形就存储在运动过程中会经过的网格中。
 
-![image-20230725194049549](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/07/SpatialPartition2.png)
+![image-20230725194049549](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/07/SpatialPartition3.png)
 
 在三维空间中，存储时会需要非常多的网格。并且空间划分的网格大小很难找到合适的，会出现一些网格中存了大量的三角形，同时有很多网格中一个三角形都没存，这种情况极大地浪费了内存。
 
 不对网格分配内存，而是将三角形和它多所在的网格存成一对。比如将t<sub>0</sub>存储成{0,0},{4,0},{5,0}三个数对。然后将这些数对按网格编号排序，这样就能很快找到同网格中的三角形。这样没有存储三角形的网格就不会占用内存了。
 
-![image-20230725200829945](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/07/SpatialPartition3.png)
+![image-20230725200829945](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/07/MortonCode.png)
 
 定义网格编号的方法。
 
