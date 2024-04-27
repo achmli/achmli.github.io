@@ -16,7 +16,7 @@ tags:
 
 ## 胡克定律
 
-![image-20230720175333947](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/04/image-20230720175333947.png)
+![image-20230720175333947](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/04/IdealSpring.png)
 
 左半边是一端固定的情况，右边是两端都可拉伸的情况。
 
@@ -28,13 +28,13 @@ tags:
 
 ## 多根弹簧
 
-![image-20230720191355754](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/04/image-20230720191355754.png)
+![image-20230720191355754](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/04/MultipleSpring.png)
 
 能量的叠加和力的叠加。每根弹簧单独计算能量和力，然后叠加在一起。
 
 ## 结构化的弹簧网络
 
-![image-20230720192816715](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/04/image-20230720192816715.png)
+![image-20230720192816715](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/04/SpringNetwork.png)
 
 正方形的网格并且连接每个网格的对角线。并且为了防止弯折边界上的点也要隔着格子用弹簧相连。
 
@@ -42,7 +42,7 @@ tags:
 
 ## 非结构化的弹簧网络
 
-![image-20230720195157381](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/04/image-20230720195157381.png)
+![image-20230720195157381](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/04/UnstructuredSpring.png)
 
 将非结构的三角形为基础的mesh转换成弹簧网络。
 
@@ -50,11 +50,11 @@ tags:
 
 ### 构造的方法
 
-![image-20230720202327007](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/04/image-20230720202327007.png)
+![image-20230720202327007](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/04/Trimesh.png)
 
 三角形网格的表示方法。用顶点位置的列表，和三角形有哪三个顶点的列表。
 
-![image-20230720203212727](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/04/image-20230720203212727.png)
+![image-20230720203212727](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/04/Topological.png)
 
 先构造一个列表，存储边的信息，数组的基础元素是三个数的数组或者向量，前两个数表示边的两个顶点的编号，编号小的在第一个位置，第三个数表示属于哪个三角形。这样一个三角形就会有三条边，共享的边也会多次存储。
 
@@ -68,7 +68,7 @@ tags:
 
 ## 显式积分
 
-![image-20230720205104901](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/04/image-20230720205104901.png)
+![image-20230720205104901](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/04/Explicit.png)
 
 右边是标准的粒子系统。
 
@@ -80,7 +80,7 @@ tags:
 
 应该先把每个顶点的里都求出来，再更新每个粒子的位置。
 
-![image-20230720211153237](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/04/image-20230720211153237.png)
+![image-20230720211153237](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/04/Explicit2.png)
 
 显式的积分会导致数值上的不稳定。弹簧会有不合理的长度变化，如上图的长度变化过程。
 
@@ -88,11 +88,11 @@ tags:
 
 ## 隐式积分
 
-![image-20230720212111868](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/04/image-20230720212111868.png)
+![image-20230720212111868](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/04/Implicit.png)
 
 隐式积分有更好的稳定性，但需要用到在求解出的位置的力。这里需要假设力之和位置有关，而弹簧也确实是这种力(holonomic)。最大的问题是力与位置的关系不是线性的。
 
-![image-20230720211654846](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/04/image-20230720211654846.png)
+![image-20230720211654846](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/04/Implicit2.png)
 
 求解<strong>x<sup>[1]</sup></strong>的等式可以等价为<strong>x<sup>[1]</sup></strong>=argmin <em>F(<strong>x</strong>)</em> ，argmin表示<em>F(<strong>x</strong>)</em>取最小值时<strong>x</strong>的值。
 
@@ -110,7 +110,7 @@ tags:
 
 ### 牛顿法
 
-![image-20230720222029462](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/04/image-20230720222029462.png)
+![image-20230720222029462](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/04/NewtonRaphson.png)
 
 牛顿法的前提是函数连续。
 
@@ -120,13 +120,13 @@ tags:
 
 函数的导数近似的等于任意位置二阶导数的值与x和当前位置的差的积加上当前位置一阶导数的值。
 
-![image-20230720222905948](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/04/image-20230720222905948.png)
+![image-20230720222905948](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/04/NewtonMethod.png)
 
 伪代码。
 
 Δx是x与x<sup>(k)</sup>的差，通过上面的等式可以求出Δx，只要Δx足够小，就可以认为x<sup>(k+1)</sup>就是最终要求的x。
 
-![image-20230721143802983](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/04/image-20230721143802983.png)
+![image-20230721143802983](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/04/Newton.png)
 
 有多个倒数为1的点时。
 
@@ -134,21 +134,21 @@ tags:
 
 如果二阶导数恒大于0，那么没有极大值，且只有一个最小值。
 
-![image-20230721144655954](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/04/image-20230721144655954.png)
+![image-20230721144655954](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/04/Newton2.png)
 
 牛顿法在弹簧系统中的使用。
 
-![image-20230721145248947](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/04/image-20230721145248947.png)
+![image-20230721145248947](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/04/NewtonSimulation.png)
 
 牛顿法模拟过程。~~毫无疑问我是没看懂的~~
 
 ### Spring Hessian
 
-![image-20230721150325917](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/04/image-20230721150325917.png)
+![image-20230721150325917](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/04/SpringHessian.png)
 
 海森矩阵：在多元微分函数中，一个函数的二阶偏导数构成的矩阵，通常用于描述函数的曲率和凹凸性。
 
-![image-20230721184100118](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/04/image-20230721184100118.png)
+![image-20230721184100118](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/04/Hessian.png)
 
 弹簧被拉伸时，Hessian正定，而被压缩时，可能就不是正定的。
 
@@ -156,19 +156,19 @@ tags:
 
 最终的正定性影响解的数量，如果正定，则有唯一解，相反，则解不一定唯一。
 
-![image-20230721185021741](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/04/image-20230721185021741.png)
+![image-20230721185021741](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/04/PositiveDefinition.png)
 
 压缩时非正定的现实解释。
 
 以及一维的弹簧二阶导恒大于0，所以不会有非正定的情况。
 
-![image-20230721185546269](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/04/image-20230721185546269.png)
+![image-20230721185546269](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/04/Enforcement.png)
 
 压缩时的应对方法，最粗暴的就是如果非正定，就把橙色框内的部分删除。
 
 ### Jacobi Method
 
-![image-20230721185928114](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/04/image-20230721185928114.png)
+![image-20230721185928114](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/04/Jacobi.png)
 
 雅各比法的流程
 
@@ -180,19 +180,19 @@ tags:
 
 如果α等于1，要求<strong>A</strong>对角占优。
 
-![image-20230721191048285](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/04/image-20230721191048285.png)
+![image-20230721191048285](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/04/LinearSolver.png)
 
 解数值方法的两种方式的对比。
 
 # 弯曲
 
-![image-20230721205949030](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/04/image-20230721205949030.png)
+![image-20230721205949030](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/04/Bending.png)
 
 当布料几乎是平面时，弯曲的弹簧提抗弯曲的力十分微弱。
 
 ## 二面角模型
 
-![image-20230721210252435](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/04/image-20230721210252435.png)
+![image-20230721210252435](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/04/Dihedral.png)
 
 二面角模型定义弯曲的力为关于两个面的夹角的函数。
 
@@ -200,13 +200,13 @@ tags:
 2. 弯曲不应该导致边缘<strong>x<sub>3</sub> x<sub>4</sub></strong>的拉伸，所以<strong>u<sub>4</sub>-u<sub>3</sub></strong>应当于这条边正交，这意味着<strong>u<sub>3</sub>-u<sub>4</sub></strong>于<strong>n<sub>1</sub></strong>和<strong>n<sub>2</sub></strong>都在一个面上，<strong>u<sub>3</sub>-u<sub>4</sub></strong>是<strong>n<sub>1</sub></strong>和<strong>n<sub>2</sub></strong>的线性组合。
 3. 四个力相加应该完全抵消。这意味着<strong>u<sub>3</sub></strong>和<strong>u<sub>4</sub></strong>是<strong>n<sub>1</sub></strong>和<strong>n<sub>2</sub></strong>的线性组合。
 
-![image-20230721212131560](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/04/image-20230721212131560.png)
+![image-20230721212131560](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/04/Dihedral2.png)
 
 四个力的求解结论。
 
 这里的“法向量”并没有归一化。
 
-![image-20230721212338291](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/04/image-20230721212338291.png)
+![image-20230721212338291](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/04/Dihedral3.png)
 
 二面角模型的函数。
 
@@ -214,11 +214,11 @@ tags:
 
 ## 二次的弯曲模型
 
-![image-20230721212911513](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/04/image-20230721212911513.png)
+![image-20230721212911513](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/04/QuadraticModel.png)
 
 这个模型有两个前提：1. 平面情况，2.拉伸十分微小。
 
-![image-20230721213311215](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/04/image-20230721213311215.png)
+![image-20230721213311215](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/04/ProCon.png)
 
 + 容易实现
 + 适合隐式迭代(因为是二次模型)
@@ -227,11 +227,11 @@ tags:
 
 # Locking Issue
 
-![image-20230721213914509](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/04/image-20230721213914509.png)
+![image-20230721213914509](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/04/LockingIssue.png)
 
 目前为止，我们认为平面的形变和弯曲的形变是独立的。
 
-![image-20230721214115065](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/04/image-20230721214115065.png)
+![image-20230721214115065](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/04/Paper.png)
 
 DoFs：degrees of freedoms
 
