@@ -14,7 +14,7 @@ tags:
 
 # 应变极限和Position Based Dynamics(PBD)
 
-![image-20230721220747811](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/05/image-20230721220747811.png)
+![image-20230721220747811](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/05/StiffnessIssue.png)
 
 真实世界的纺织物对拉伸反抗强烈，一旦拉伸超过了一个明确的限制
 
@@ -26,7 +26,7 @@ tags:
 
 ## 一根弹簧
 
-![image-20230721221306129](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/05/image-20230721221306129.png)
+![image-20230721221306129](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/05/SingleSpring.png)
 
 假设一根弹簧的刚性是无限的，就可以把长度当义成约束，并且定义一个投影函数。
 
@@ -34,11 +34,11 @@ tags:
 
 修改顶点，使得满足约束。
 
-![image-20230721221923142](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/05/image-20230721221923142.png)
+![image-20230721221923142](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/05/SingleSpring2.png)
 
 理解成六维空间，把弹簧的两个顶点理解成六维空间中的一个点。要做的投影就是修改<strong>x</strong>,让它落到符合约束的范围中去。而投影的位置应该是整个区域离当前的点最近的点(最近的表面上的点)。
 
-![image-20230721222710278](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/05/image-20230721222710278.png)
+![image-20230721222710278](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/05/SingleSpring3.png)
 
 修改的方法。
 
@@ -46,18 +46,18 @@ tags:
 
 ### 高斯-塞德尔方法
 
-![image-20230721222938362](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/05/image-20230721222938362.png)
+![image-20230721222938362](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/05/MultiSpring.png)
 
 先让一根满足约束，然后再修改另一根，如此往复。
 
-![image-20230721223132862](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/05/image-20230721223132862.png)
+![image-20230721223132862](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/05/MultiSpring2.png)
 
 + 不能保证所有约束都得到满足。
 + 与顺序有关。会影响误差和收敛速度。
 
 ### Jacobi Approach
 
-![image-20230721223402553](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/05/image-20230721223402553.png)
+![image-20230721223402553](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/05/MultiSpring3.png)
 
 减少边的顺序所造成的影响，同时更容易实现并行。
 
@@ -67,7 +67,7 @@ tags:
 
 ## PBD
 
-![image-20230721231655046](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/05/image-20230721231655046.png)
+![image-20230721231655046](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/05/PBD.png)
 
 首先是顶点自由运动。
 
@@ -77,7 +77,7 @@ tags:
 + 速度更新对动态效果十分重要。
 + 这个方法可以实现一些其他的约束。比如三角形约束、体积约束。
 
-![image-20230721232349596](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/05/image-20230721232349596.png)
+![image-20230721232349596](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/05/ProCon.png)
 
 优点
 
@@ -93,17 +93,17 @@ tags:
 
 ## 应变极限(strain limiting)
 
-![image-20230721233118615](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/05/image-20230721233118615.png)
+![image-20230721233118615](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/05/StrainLimit.png)
 
 流程看上去和PBD是一样的，但是第一步粒子依然在做物理上的模拟，而不是自由运动。
 
-![image-20230721233237907](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/05/image-20230721233237907.png)
+![image-20230721233237907](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/05/SpringLimit.png)
 
 设定拉伸比例，并且拉伸比例有上下限。
 
 在拉伸或压缩后，只要求弹簧长度回复到一定的范围内，而不是严格的原长
 
-![image-20230721233458163](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/05/image-20230721233458163.png)
+![image-20230721233458163](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/05/SpringLimit2.png)
 
 先计算拉伸比。
 
@@ -115,11 +115,11 @@ tags:
 
 ### 三角形面积Limit
 
-![image-20230721233947517](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/05/image-20230721233947517.png)
+![image-20230721233947517](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/05/AreaLimit.png)
 
 想要的面积除以当前的面积就得到缩放比例，然后对原三角形缩放，就得到了更新后的三角形。
 
-![image-20230721234320704](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/05/image-20230721234320704.png)
+![image-20230721234320704](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/05/AreaLimit2.png)
 
 1. 求出当前面积
 2. 计算缩放比例
@@ -128,7 +128,7 @@ tags:
 
 ### strain limiting 在模拟中的用处
 
-![image-20230721234247665](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/05/image-20230721234247665.png)
+![image-20230721234247665](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/05/LimitSimulation.png)
 
 + 避免不稳定和artifact
 + 对非线性表现很有用。
@@ -136,27 +136,27 @@ tags:
 
 # Project Dynamics
 
-![image-20230722105156237](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/05/image-20230722105156237.png)
+![image-20230722105156237](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/05/Projective.png)
 
 project dynamics用投影去定义能量。
 
 经过计算后，无论是能量还是力都与弹簧直接模拟相同。只是多了中间变量$\mathbf{x}\_{e,i}^{new}-\mathbf{x}\_{e,j}^{new}$。
 
-![image-20230722112401819](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/05/image-20230722112401819.png)
+![image-20230722112401819](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/05/Explained.png)
 
 只是Project Dynamics的Hessian最终会是一个常数矩阵。
 
-![image-20230722112653104](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/05/image-20230722112653104.png)
+![image-20230722112653104](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/05/ProjectiveSimulation.png)
 
 projective dynamics的模拟过程。
 
-![image-20230722112944026](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/05/image-20230722112944026.png)
+![image-20230722112944026](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/05/Steepest.png)
 
 相当于预计算了Hessian。
 
 性能表现取决于Hessian矩阵的近似程度。
 
-![](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/05/image-20230722113526420.png)
+![](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/05/ProCon2.png)
 
 优点
 
@@ -172,15 +172,15 @@ projective dynamics的模拟过程。
 
 # Constrained Dynamics
 
-![image-20230722113856722](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/05/image-20230722113856722.png)
+![image-20230722113856722](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/05/Constrained.png)
 
 对于刚性十分强的情况。
 
-![image-20230722114549165](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/05/image-20230722114549165.png)
+![image-20230722114549165](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/05/Constrained2.png)
 
 获得了一个线性系统。
 
-![image-20230722114727466](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/05/image-20230722114727466.png)
+![image-20230722114727466](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/05/Constrained3.png)
 
 求解线性系统。
 
