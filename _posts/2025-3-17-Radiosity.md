@@ -32,14 +32,13 @@ tags:
 
 ### 直接光照的优缺点
 
-|                         | 优点                                                                             | 缺点                                               |
-| ----------------------- | -------------------------------------------------------------------------------- | -------------------------------------------------- |
-| `<b>`光线追踪`</b>` | 无论是数学描述的物体还是多边形的网格体都能渲染<br />可以用来做一些很酷的体积特效 | 速度慢<br />非常锐利的阴影和反射                   |
-| `<b>`阴影体积`</b>` | 可以用来实现软阴影                                                               | 很难实现<br />非常锐利的阴影<br />只支持多边形网格 |
-| `<b>`Z-Buffer`</b>` | 易于实现<br />快，能实时渲染                                                     | 锐利的阴影还伴随有走样的问题                       |
+|                          | 优点                                                                             | 缺点                                               |
+| ------------------------ | -------------------------------------------------------------------------------- | -------------------------------------------------- |
+| `<b>`光线追踪 `</b>` | 无论是数学描述的物体还是多边形的网格体都能渲染<br />可以用来做一些很酷的体积特效 | 速度慢<br />非常锐利的阴影和反射                   |
+| `<b>`阴影体积 `</b>` | 可以用来实现软阴影                                                               | 很难实现<br />非常锐利的阴影<br />只支持多边形网格 |
+| `<b>`Z-Buffer `</b>` | 易于实现<br />快，能实时渲染                                                     | 锐利的阴影还伴随有走样的问题                       |
 
-| ![cuisine_t](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/witness/9/cuisine_t.jpg) | ![g002hi_t](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/witness/9/g002hi_t.jpg) | ![silver_chess_b_t](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/witness/9/silver_chess_b_t.jpg) |
-| -------------------------------- | ------------------------------ | ---------------------------------------------- |
+![triPics1](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/witness/9/triPIcs1.jpg)
 
 需要考虑的最重要的是，尽管这些方法可以生成超现实的图像，但他们只能处理那些只有点光源并且物体都是完美的镜面反射或者漫反射的场景。除非你是地主家的傻儿子，你的房子里大概不会全是点光源和完美的镜面反射的球。实际上，除非你生活在另一个物理规律完全不同的宇宙，不然你的房子里基本上不会有任何超级锐利的阴影。
 
@@ -95,17 +94,17 @@ tags:
 
 我现在假装再问一个阴影相关的专家，他会向你解释他知道这个科目的一切。我的专家是我面前的墙上的一小块油漆。（译：难道那个年代的人喜欢这种“幽默”吗）
 
-`<b>`Hugo`</b>`：“为什么你在阴影中，而你附近和你很像的另一块尤其却站在光里？”
+`<b>`Hugo `</b>`：“为什么你在阴影中，而你附近和你很像的另一块尤其却站在光里？”
 
-`<b>`油漆`</b>`：“你什么意思？”
+`<b>`油漆 `</b>`：“你什么意思？”
 
-`<b>`Hugo`</b>`：“你是怎么知道什么时候再阴影中，什么时候不在的呢？关于阴影投射算法你又知道什么呢？你只是一块油漆？”
+`<b>`Hugo `</b>`：“你是怎么知道什么时候再阴影中，什么时候不在的呢？关于阴影投射算法你又知道什么呢？你只是一块油漆？”
 
-`<b>`油漆`</b>`：“听好了伙计。我根本听不懂你在说什么。我所做的只有简单的一件事，那就是任何光照射到我的时候，我把它散射回去。“
+`<b>`油漆 `</b>`：“听好了伙计。我根本听不懂你在说什么。我所做的只有简单的一件事，那就是任何光照射到我的时候，我把它散射回去。“
 
-`<b>`Hugo`</b>`：“任何？”
+`<b>`Hugo `</b>`：“任何？”
 
-`<b>`油漆`</b>`：“对，任何光照。我不偏食。“
+`<b>`油漆 `</b>`：“对，任何光照。我不偏食。“
 
 所以现在你知道了辐射度算法的基本前提。任何光线打到表面上，都会被反射回场景中。这里提到的任意光线，不只是从光源来的那些光线。任意光线。这就是现实中的油漆的思考方式，也是辐射度算法的渲染器的工作方式。
 
@@ -264,7 +263,7 @@ load scene
 
 ### initialise patches
 
-`<em>`初始化块`</em>`：在最初，除了能自发光的块之外，其余所有的块都是漆黑的。那些能够自发光的块用一些 `emission`的值初始化，这些值已经由场景指定了。其余的所有块这个值都设置成0，也就是黑色。
+`<em>`初始化块 `</em>`：在最初，除了能自发光的块之外，其余所有的块都是漆黑的。那些能够自发光的块用一些 `emission`的值初始化，这些值已经由场景指定了。其余的所有块这个值都设置成0，也就是黑色。
 
 ### Passes Loop
 
@@ -272,11 +271,11 @@ load scene
 
 ### each patch collects light from the scene
 
-`<em>`每一个块从场景中收集光照`</em>`：正如我之前在文章中解释的，每个块被周围它能看到的部分照亮。这是通过在这个块所造的视点渲染场景实现的，并且将能它看到的光叠加起来。在下一节我会更加详细地讲解这部分。
+`<em>`每一个块从场景中收集光照 `</em>`：正如我之前在文章中解释的，每个块被周围它能看到的部分照亮。这是通过在这个块所造的视点渲染场景实现的，并且将能它看到的光叠加起来。在下一节我会更加详细地讲解这部分。
 
 ### calculate excident light from each patch
 
-`<em>`计算每个块的出射光`</em>`：已经计算出了每个块会有多少光到达，我们就能计算出每个块有多少光会离开了。这个过程需要被循环许多次才能获得好的效果。如果渲染器需要一个新的pass，就跳回到Passes Loop这一步。
+`<em>`计算每个块的出射光 `</em>`：已经计算出了每个块会有多少光到达，我们就能计算出每个块有多少光会离开了。这个过程需要被循环许多次才能获得好的效果。如果渲染器需要一个新的pass，就跳回到Passes Loop这一步。
 
 ## 实现辐射度算法：半立方体
 
@@ -340,7 +339,7 @@ load scene
 
 ### 将两者结合：乘数映射
 
-现在集中注意力，这很`<b>`重要`</b>`：
+现在集中注意力，这很 `<b>`重要 `</b>`：
 
 将两个映射图逐像素相乘得到这个。这个映射对于生成一个精确的辐射度算法的解决方案是至关重要的。这是用来调整透视投影产生的失真的，上文中已经提过了，这会导致半立方体边角位置的物体会投射过多的光到块上。他还将Lambert余弦定律带了进来。
 
@@ -400,15 +399,15 @@ load scene
 
 这个程序选取了场景中的一个点（通常是一个块），沿着发现方向，并且计算到达这个点的光的总数。
 
-首先它使用了函数**RenderView**(point, vector, part)渲染半立方体的五个面。函数的参数，`point`是相机的位置、`vector`是相机应该指向的方向，而另一个参数则用于告诉函数应该渲染最终的图像中的哪一部分。这五张半立方体的图像的存储的结构称为`<b>`H`</b>`（下图中最左侧的一列）。
+首先它使用了函数**RenderView**(point, vector, part)渲染半立方体的五个面。函数的参数，`point`是相机的位置、`vector`是相机应该指向的方向，而另一个参数则用于告诉函数应该渲染最终的图像中的哪一部分。这五张半立方体的图像的存储的结构称为 `<b>`H `</b>`（下图中最左侧的一列）。
 
-在半立方体`<b>`H`</b>`渲染完成后，它就要与乘数映射图的半立方体`<b>`M`</b>`（下图中的中间一列）相乘，并且将结果存储在半立方体`<b>`R`</b>`（下图中最右侧的一列）中。
+在半立方体 `<b>`H `</b>`渲染完成后，它就要与乘数映射图的半立方体 `<b>`M `</b>`（下图中的中间一列）相乘，并且将结果存储在半立方体 `<b>`R `</b>`（下图中最右侧的一列）中。
 
 ![hemis](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/witness/9/hemis.gif)
 
 ### 伪代码中变量类型的解释
 
-`<b>`light`</b>`：用于存储任意的光照值。例如：
+`<b>`light `</b>`：用于存储任意的光照值。例如：
 
 ```pseudocode
   structure light
@@ -418,7 +417,7 @@ load scene
   end structure
 ```
 
-`<b>`hemicube`</b>`：用于存储场景中一些点的视点出发下的场景的图像。一个半立方体由5张图像组成，正如上图中绘制的，其中每个像素都是一种光。如果是乘数图的半立方体，用于存储乘数的值而不是光照的值，也在上图中绘制了。
+`<b>`hemicube `</b>`：用于存储场景中一些点的视点出发下的场景的图像。一个半立方体由5张图像组成，正如上图中绘制的，其中每个像素都是一种光。如果是乘数图的半立方体，用于存储乘数的值而不是光照的值，也在上图中绘制了。
 
 ```pseudocode
   structure hemicube
@@ -430,7 +429,7 @@ load scene
   end structure
 ```
 
-`<b>`camera`</b>`：例如：
+`<b>`camera `</b>`：例如：
 
 ```pseudocode
   structure camera
@@ -457,28 +456,23 @@ load scene
 
 左侧的图中左边的部分展示了过程中生成的lightmap，右边红色标记表示通过半球立方体计算的像素，绿色表示线性插值得出的像素。右侧的图则是放大的计算过程。
 
-| ![adap1](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/witness/9/adap1.gif) | ![grid1](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/witness/9/grid1.gif) |
-| ------------------------ | ------------------------ |
+![dualPics1](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/witness/9/dualPics1.png)
 
 每4个像素渲染一个半立方体。
 
-| ![adap2](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/witness/9/adap2.gif) | ![grid2](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/witness/9/grid2.gif) |
-| ------------------------ | ------------------------ |
+![dualPics2](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/witness/9/dualPics2.png)
 
 第一类Pass：检测像素，找到上一步的找到的两个垂直或者水平相邻的像素之间的中间的像素，如果两个像素之间的差大于设定的阈值，那就在中间的像素渲染一般半立方体，如果小于阈值，那就用两个像素的线性插值计算这个像素的值。
 
-| ![adap3](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/witness/9/adap3.gif) | ![grid3](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/witness/9/grid3.gif) |
-| ------------------------ | ------------------------ |
+![dualPics3](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/witness/9/dualPics3.png)
 
 第二类Pass：检测像素，找到四个已经有值的像素中间位置的像素，如果这四个像素的值差异较大，就在这个中间像素渲染半立方体，否则就双线性插值计算出这个像素的值。
 
-| ![adap4](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/witness/9/adap4.gif) | ![grid4](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/witness/9/grid4.gif) |
-| ------------------------ | ------------------------ |
+![dualPics4](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/witness/9/dualPics4.png)
 
 重复第一类Pass，但是间隔减半。
 
-| ![adap5](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/witness/9/adap5.gif) | ![grid5](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/witness/9/grid5.gif) |
-| ------------------------ | ------------------------ |
+![dualPics5](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/witness/9/dualPics5.png)
 
 重复第二类Pass，但是间隔减半。
 
@@ -580,14 +574,14 @@ load scene
                      LightMap[x1, y1] = incidentLight
                  }
              }
-           
+         
 
              // Calculate the inbetween pixels, whose neighbours are left and right of this pixel
              if (y<Yres)    // Don't go off the edge of the Light Map now
              {
                  x1 = x-HalfSpacing
                  y1 = y
-            
+          
                  // Read the 2 (up and down) neighbours from the Light Map
                  I1 = LightMap[x1,y1-HalfSpacing];
                  I2 = LightMap[x1,y1+HalfSpacing];
