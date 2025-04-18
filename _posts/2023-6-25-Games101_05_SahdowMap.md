@@ -1,5 +1,4 @@
 ---
-​---
 layout:       post
 title:        "Games101笔记05——ShaowMap"
 author:       "Fon"
@@ -8,12 +7,7 @@ catalog:      true
 tags:
     - Games101
     - 图形学
-
-​---
 ---
-
-
-
 # Shadow Mapping
 
 <img src="https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games101/05/image-20230625165952619.png" alt="image-20230625165952619" style="zoom:100%;" />
