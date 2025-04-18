@@ -63,13 +63,13 @@ pbrt这本书是非常好的资源，而且附带的源码包含了一个虽然�
 
 提高插值效果最有效的方法之一是在采样点估算irradiance的梯度，这能告诉我们当表面的位置和朝向变化时irradiance是怎么变化的。我们不能精确地评估irradiance梯度的值，但通过我们在渲染半立方体时获得的信息可以找到合理的近似。
 
-在我之前的文章中，我解释了irradiance的积分只是仅仅将radiance的采样加权求和。其中每个样本的贡献是每个半立方体的像素的radiance `<em>`Li`</em>`和这个像素的立体角`<em>`Ai`</em>`以及余弦项`<em>`cosθi`</em>`这三项的乘积。也就是说，点`<b>`x`</b>`的irradiance `<em>`E`</em>`(`<b>`x`</b>`)的近似值如下：
+在我之前的文章中，我解释了irradiance的积分只是仅仅将radiance的采样加权求和。其中每个样本的贡献是每个半立方体的像素的radiance <em>Li</em>和这个像素的立体角<em>Ai</em>以及余弦项<em>cosθi</em>这三项的乘积。也就是说，点<b>x</b>的irradiance <em>E</em>(<b>x</b>)的近似值如下：
 
 $$
 E(\mathbf{x}) \simeq\sum_{i=0}^NA_iL_icos\theta_i
 $$
 
-irradiance梯度需要考虑的是这些项在无穷小的旋转和平移下的变化，通过对`<em>`E`</em>`(`<b>`x`</b>`)微分可得：
+irradiance梯度需要考虑的是这些项在无穷小的旋转和平移下的变化，通过对<em>E</em>(<b>x</b>)微分可得：
 
 $$
 \nabla E(\mathbf{x}) \simeq \sum_{i=0}^N \nabla A_iL_icos\theta_i
@@ -103,7 +103,7 @@ $$
 \frac{\partial}{\partial \theta_i} cos\theta_i = -sin\theta_i
 $$
 
-而旋转轴是z轴和像素的方向`<b>`di`</b>`的叉积：
+而旋转轴是z轴和像素的方向<b>di</b>的叉积：
 
 $$
 \mathbf{v}_i = |\mathbf{d}_i \times (0, 0, 1)|
@@ -115,7 +115,7 @@ $$
 \nabla_r cos\theta_i = -\mathbf{v}_isin\theta_i
 $$
 
-由于sin`<em>`θi`</em>`就是`<b>`v`</b>`i归一化前的长度，所以式子还可以被进一步简化：
+由于sin<em>θi</em>就是<b>v</b>i归一化前的长度，所以式子还可以被进一步简化：
 
 $$
 \nabla_r cos\theta_i = (\mathbf{d}_{yi}, -\mathbf{d}_{xi}, 0)
@@ -150,7 +150,7 @@ $$
 d\omega_{\Theta}=\frac{\mathbf{n}\cdot\Theta}{r^2}da
 $$
 
-对于那些在半立方体顶面的像素，`<b>`n`</b>`与z轴方向是相等的，所以这种情况微分立体角为：
+对于那些在半立方体顶面的像素，<b>n</b>与z轴方向是相等的，所以这种情况微分立体角为：
 
 $$
 d\omega_{\Theta}=\frac{cos\theta}{r^2}da
@@ -178,7 +178,7 @@ $$
 
 如下面几张lightmap所示，使用这些梯度值的得到的结果在远离遮挡物时会相对比较平滑，但在靠近遮挡物时会产生不正确的结果。
 ![translation_gradient_comparison](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/witness/8/translation_gradient_comparison_a.png)
-`<em>`最左是用于参考的，中间是没有使用梯度的irradiance缓存，最右是使用现在有缺陷的梯度的irradiance缓存。`</em>`
+<em>最左是用于参考的，中间是没有使用梯度的irradiance缓存，最右是使用现在有缺陷的梯度的irradiance缓存。</em>
 
 六边形对应房间的天花板，这个房间的两侧由墙壁和一闪窗户，光线可以通过窗户进入房间。图片的左侧用于参考，每个像素有一个半立方体采样。图片的中央是用irradiance缓存并且只用了2%的采样数计算的相同的lightmap。注意采样数是为了更加突出瑕疵故意降到这么低的。图片的右侧是用之前提出的梯度计算方法计算出的相同的lightmap，如果你靠近看，能看出在这张lightmap靠内部的位置看上去比较平滑，但是靠近墙的位置瑕疵依然存在。
 
@@ -210,19 +210,19 @@ r=\sqrt{x^2+y^2+z^2}  \\
  \theta = arccos\frac{z}{r}
 $$
 
- 对于经度边，我们可以考虑沿着x轴运动时`<em>`θ`</em>`是怎么变化的：
+ 对于经度边，我们可以考虑沿着x轴运动时<em>θ</em>是怎么变化的：
 
 $$
 $ \frac{\partial \theta}{\partial x} = \frac{-cos \theta}{r}
 $$
 
-而对于纬度边，我可以考虑沿着y轴运动时`<em>`Φ`</em>`是怎么变化的：
+而对于纬度边，我可以考虑沿着y轴运动时<em>Φ</em>是怎么变化的：
 
 $$
 \frac{\partial \phi}{\partial y} = \frac{-1}{r sin\theta}
 $$
 
-正如我们之前所描述的，运动速率是被最邻近的边(egde)主导的，所以`<em>`r`</em>`的值取与边邻接的最近的两个采样点中最小的深度值。
+正如我们之前所描述的，运动速率是被最邻近的边(egde)主导的，所以<em>r</em>的值取与边邻接的最近的两个采样点中最小的深度值。
 
 这些方程详细的推导可以在[Wojciech Jarosz&#39;s dissertation](http://zurich.disneyresearch.com/~wjarosz/publications/dissertation/)中找到。他的细节解释十分口语化，所以我十分推荐去阅读一下，以对这些方程的推导有更深入的认识。
 
