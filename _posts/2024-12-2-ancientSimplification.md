@@ -1,6 +1,6 @@
 ---
 layout:       post
-title:        "应该是古早的某种被称为Billbaord Clouds的LOD技术-Part1"
+title:        "应该是古早的某种被称为Billboard Clouds的LOD技术-Part1"
 author:       "Fon"
 header-style: text
 catalog:      true
