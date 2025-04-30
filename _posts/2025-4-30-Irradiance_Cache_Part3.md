@@ -90,7 +90,11 @@ $$ =\frac{\pi}{N} \sum_{i=1}^N L(\mathbf{x},\vec{\omega}_i) $$
 
 $$ \epsilon_i^t = \iint_A|E(\mathbf{x}_i+\Delta\mathbf{x})-E^{\prime}(\mathbf{x}_i+\Delta\mathbf{x})|d\Delta\mathbf{x} $$
 
-其中A是缓存点的支持域的面积，$\Delta\mathbf{x}$是切平面上的二维偏差。而$ E^{\prime}(\mathbf{x}_i+\Delta\mathbf{x}) = E_i(\mathbf{x}_i) + \nabla_\mathbf{x}E_i(\mathbf{x}_i) $，其中$ \Delta\mathbf{x} $是irradiance的一阶泰勒展开。
+其中A是缓存点的支持域的面积，$ \Delta\mathbf{x} $是切平面上的二维偏差。
+
+而$ E^{\prime}(\mathbf{x}_i+\Delta\mathbf{x}) = E_i(\mathbf{x}_i) + \nabla_\mathbf{x}E_i(\mathbf{x}_i) $，
+
+其中$ \Delta\mathbf{x} $是irradiance的一阶泰勒展开。
 
 为了让irradiance缓存更加高效，目标是使用尽可能大的支持域A，将误差限制到某个阈值$\epsilon^t$。
 
@@ -230,7 +234,15 @@ $$ \left(R_i^{\lambda_1}, R_i^{\lambda_2} \right) = \sqrt[4]{\frac{4\epsilon^r E
 
 ### irradiance的存储与插值
 
-每个缓存点i需要存储的内容有：位置和法线$(\mathbf{x}_i,\mathbf{\vec{n}}_i)$、irradiance的值$E_i$、irradiance的梯度$(\nabla_\mathbf{x}E_i,\nabla_\mathbf{\vec{n}}E_i)$、两个各向异性的半径$(R_i^{\lambda_1},R_i^{\lambda_2})$以及对应的特征向量$(\mathbf{v}_i^{\lambda_1},\mathbf{v}_i^{\lambda_2})$。
+每个缓存点i需要存储的内容有：位置和法线$(\mathbf{x}_i,\mathbf{\vec{n}}_i)$、
+
+irradiance的值$E_i$、
+
+irradiance的梯度$(\nabla_\mathbf{x}E_i,\nabla_\mathbf{\vec{n}}E_i)$、
+
+两个各向异性的半径$(R_i^{\lambda_1},R_i^{\lambda_2})$
+
+以及对应的特征向量$(\mathbf{v}_i^{\lambda_1},\mathbf{v}_i^{\lambda_2})$。
 
 之前计算出的$\mathbf{H_x^{2 \times 2}}$特征值分解后得到的特征向量$\mathbf{v}_i^\prime$是由正交基向量$ \mathbf{u_1,u_2} $在切线空间定义的，需要将其转换到世界空间：$ \mathbf{v}_i = [\mathbf{u}_1 \cdot \mathbf{v}_i^\prime,\mathbf{u}_2 \cdot \mathbf{v}_i^\prime] $。
 
