@@ -94,7 +94,7 @@ $$ \epsilon_i^t = \iint_A|E(\mathbf{x}_i+\Delta\mathbf{x})-E^{\prime}(\mathbf{x}
 
 而$ E^{\prime}(\mathbf{x}_i+\Delta\mathbf{x}) $
 
- = $E_i(\mathbf{x}_i) + \nabla_\mathbf{x}E_i(\mathbf{x}_i)$，
+ = $ E_i(\mathbf{x}_i) + \nabla_\mathbf{x}E_i(\mathbf{x}_i) $，
 
 其中$ \Delta\mathbf{x} $是irradiance的一阶泰勒展开。
 
