@@ -9,7 +9,7 @@ tags:
     - 图形学
 ---
 
-> 这篇是在之前的[Irradiance Cache续](https://zhuanlan.zhihu.com/p/1888626331421475570)中提到的 <em>the witness</em>中没采用的更先进的误差控制方法的论文。
+> 这篇是在之前的[Irradiance Cache续](https://achmli.github.io/2025/03/27/Irradiance_Caching_Continued/)中提到的 <em>the witness</em>中没采用的更先进的误差控制方法的论文。
 >
 > 翻译论文感觉没什么意义，就简单地读一下，这篇就当是笔记吧（但似乎写着写着又变成翻译了，只能说没有静下心来阅读和总结的能力和心情。。。）。是12年的论文，按理说放现在应该不算很有价值，所以定位依然是看着图一乐。当然如果意料之外地对您能有所启发那是最好不过了。
 > 
