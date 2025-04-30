@@ -90,7 +90,9 @@ $$ =\frac{\pi}{N} \sum_{i=1}^N L(\mathbf{x},\vec{\omega}_i) $$
 
 $$ \epsilon_i^t = \iint_A|E(\mathbf{x}_i+\Delta\mathbf{x})-E^{\prime}(\mathbf{x}_i+\Delta\mathbf{x})|d\Delta\mathbf{x} $$
 
-其中A是缓存点的支持域的面积，$\Delta\mathbf{x}$是切平面上的二维偏差。而$ E^{\prime}(\mathbf{x}_i+\Delta\mathbf{x}) = E_i(\mathbf{x}_i) + \nabla_\mathbf{x}E_i(\mathbf{x}_i) $，其中$ \Delta\mathbf{x} $是irradiance的一阶泰勒展开。为了让irradiance缓存更加高效，目标是使用尽可能大的支持域A，将误差限制到某个阈值$\epsilon^t$。
+其中A是缓存点的支持域的面积，$\Delta\mathbf{x}$是切平面上的二维偏差。而$ E^{\prime}(\mathbf{x}_i+\Delta\mathbf{x}) = E_i(\mathbf{x}_i) + \nabla_\mathbf{x}E_i(\mathbf{x}_i) $，其中$ \Delta\mathbf{x} $是irradiance的一阶泰勒展开。
+
+为了让irradiance缓存更加高效，目标是使用尽可能大的支持域A，将误差限制到某个阈值$\epsilon^t$。
 
 由于这个表达式依赖于ground truth的irradiance $E$，但是计算真实的irradiance显然过于复杂和低效，所以通过irradiance的二阶的泰勒展开来估算这个值，最终的表达式中可以将缓存点的误差与irradiance的Hessian矩阵直接关联起来：
 
