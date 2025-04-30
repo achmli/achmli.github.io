@@ -90,11 +90,9 @@ $$ =\frac{\pi}{N} \sum_{i=1}^N L(\mathbf{x},\vec{\omega}_i) $$
 
 $$ \epsilon_i^t = \iint_A|E(\mathbf{x}_i+\Delta\mathbf{x})-E^{\prime}(\mathbf{x}_i+\Delta\mathbf{x})|d\Delta\mathbf{x} $$
 
-其中A是缓存点的支持域的面积，$ \Delta\mathbf{x} $是切平面上的二维偏差。
+其中A是缓存点的支持域的面积，$ \Delta\mathbf{x} $是切平面上的二维偏差。其中
 
-而$ E^{\prime}(\mathbf{x}_i+\Delta\mathbf{x}) $
-
- $ = E_i(\mathbf{x}_i) + \nabla_\mathbf{x}E_i(\mathbf{x}_i) $
+$$ E^{\prime}(\mathbf{x}_i+\Delta\mathbf{x}) = E_i (\mathbf{x}_i) + \nabla_\mathbf{x} E_i(\mathbf{x}_i) $$
 
 其中$ \Delta\mathbf{x} $是irradiance的一阶泰勒展开。
 
