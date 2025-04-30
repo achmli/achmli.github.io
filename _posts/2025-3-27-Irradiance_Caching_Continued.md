@@ -37,7 +37,7 @@ tags:
 
 左侧展示的是仅使用球面分割启发式方法(split sphere heuristic)，梯度幅度决定了记录的位置和半径。右侧则展示了我使用的方法，基于梯度的差调整记录幅度。你能看到左侧会因为记录过大而忽视墙面的遮挡，结果就是分布过于系数，并且产生不稳定的(choppy)的结果。这些artifact可以通过增加全局记录幅度来消除，但是在相同的采样数的情况下，图片右边产生了更加准确的结果。
 
-我也可以深入讲解更多的实现细节，但是如果你实现过Krivanek的记录替换策略并且对neighbor clamping很熟悉，我希望这个改进方案会相对直观。回想当初我实现这些算法的时候，我就失去了描述更多细节的动力。因为这些技术，以及我做的这些提升由于这篇新发布的论文[Practical Hessian-Based Error Control for Irradiance Caching](http://zurich.disneyresearch.com/~wjarosz/publications/schwarzhaupt12practical.html)（译：链接挂了捏）变得过时了。
+我也可以深入讲解更多的实现细节，但是如果你实现过Krivanek的记录替换策略并且对neighbor clamping很熟悉，我希望这个改进方案会相对直观。回想当初我实现这些算法的时候，我就失去了描述更多细节的动力。因为这些技术，以及我做的这些提升由于这篇新发布的论文[Practical Hessian-Based Error Control for Irradiance Caching](https://studios.disneyresearch.com/2012/11/01/practical-hessian-based-error-control-for-irradiance-caching/)变得过时了。
 
 这篇论文提出了一种新的半球积分计算方案来估算irradiance梯度。他们的核心思想是将半球采样（颜色和深度）转换到三角形环境(triangulated environment)，在积分产生出相同的irradiance时。这种三角化具有任意性，这意味着他们的方法适用于任意的采样分布而不需要[像我之前的文章](https://zhuanlan.zhihu.com/p/30265118810)一样重新推导公式。更进一步来说，他们的方法不仅适用于估算irradiance梯度，也能用于求解Hessian(求解Hessian矩阵吧大概)，这使得它们能够直接基于irradiance的二阶导来引导记录分布，不需要像我的实现一样在一个原始的分布的基础上做修正。
 
