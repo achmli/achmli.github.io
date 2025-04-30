@@ -150,7 +150,7 @@ $$ (R_i^{\lambda_1},R_i^{\lambda_2}) \approx \sqrt[4]{\frac{4\epsilon^t}{\pi}}(\
 
 首先处理半球采样，构建一个对周围环境几何的连续的分段线性近似，如上图所示，当半球采样射线转换为​​三角化的几何环境​​时，每个相邻采样点会连接形成三角形网格，这些三角形模拟了场景中遮挡和非遮挡区域的辐射贡献。从x点的视角看，这是没有遮挡的。（没太理解，应该是说每个分段都没有被遮挡？）然后就能计算出这个三角化的场景的irradiance梯度和hessian，并且结果中包含了物理场景中的遮挡关系，尽管这个过程没有显示地处理这些遮挡。
 
-假设已构建三角化的半球环境吗，那么上面计算irradiance的表达式在这个几何近似中可以被表述成：
+假设已构建三角化的半球环境，那么上面计算irradiance的表达式在这个几何近似中可以被表述成：
 
 $$ E(\mathbf{x},\mathbf{\vec{n}}) \approx \sum_{j=1}^M L_{\Delta_j} F_{\Delta_j}(\mathbf{x}) $$
 
@@ -175,7 +175,7 @@ $$ \mathbf{H_x}^{2 \times 2} =\begin{bmatrix}
 
 ![triangulate](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/witness/11/Triangulation.png)
 
-在构建三角化环境时，需要考虑的是每条采样光线的命中距离和命中位置。遍历所有样本，每两个相邻的样本相连与对应的两条采样光线组成一个三角形。利用上图中的分层中包含的邻接信息可以加速这一过程。网格和入射的radiance信息结合，就能获得x处的三维场景快照（snapshot）。下图展示了cornell box中在红点处构建的采样网格。
+在构建三角化环境时，需要考虑的是每条采样光线的命中距离和命中位置。遍历所有样本，每两个相邻的样本相连与对应的两条采样光线组成一个三角形。利用上图中的分层中包含的邻接信息可以加速这一过程。网格和入射的radiance信息结合，就能获得x处的三维场景快照（snapshot）。下图展示了cornell box中在红点处构建的采样网格。(这段话是我在读这段时的错误理解，应当是相邻的三个采样点组成一个三角形，而不是相邻的两个采样点与着色点x组成三角形。)
 
 ![Cornell Box](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/witness/11/CornellBoxTriangulate.png)
 
