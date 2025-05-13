@@ -23,7 +23,7 @@ tags:
 >
 > 博客链接：[Ignacio Castaño](https://www.ludicon.com/castano/blog/)
 >
-> 原文链接：[Lightmap optimizations for iOS](http://www.ludicon.com/castano/blog/2022/11/bc1-compression-revisited/)
+> 原文链接：[BC1 Compression Revisited](http://www.ludicon.com/castano/blog/2022/11/bc1-compression-revisited/)
 >
 > 作者： Ignacio Castaño
 
