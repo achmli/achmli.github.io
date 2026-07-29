@@ -24,6 +24,8 @@ tags:
 
 <del class="spoiler-strike" tabindex="0"> 所以你都快用ai写了小半个jai游戏引擎了，居然连基本语法都还不会吗 </del>
 
+<del class="spoiler-strike" tabindex="0"> 这下确实大逆不道了喵╥﹏╥... </del>
+
 ### 学习目标
 - 理解 `:`、`:=`、`::` 的区别；
 - 理解显式类型、类型推导和编译期常量；
