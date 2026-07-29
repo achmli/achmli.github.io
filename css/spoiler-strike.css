@@ -1,0 +1,19 @@
+/*
+ * Usage in a Markdown post:
+ * <del class="spoiler-strike" tabindex="0">hidden text</del>
+ */
+.spoiler-strike {
+  background-color: #000;
+  border-radius: 2px;
+  color: #000;
+  cursor: pointer;
+  text-decoration: line-through;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.spoiler-strike:hover,
+.spoiler-strike:focus {
+  background-color: transparent;
+  color: inherit;
+  outline: none;
+}
