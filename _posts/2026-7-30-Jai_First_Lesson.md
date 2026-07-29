@@ -1,6 +1,6 @@
 ---
 layout:       post
-title:        "Jai学习第一课————声明、字面量与静态类型"
+title:        "Jai学习第一课——声明、字面量与静态类型"
 author:       "Fon"
 header-style: text
 catalog:      true
