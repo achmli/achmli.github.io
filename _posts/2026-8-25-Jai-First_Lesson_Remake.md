@@ -1,7 +1,7 @@
 ---
 layout:       post
 title:        "Jai学习第一课重制版——声明与类型"
--proauthor:       "deepseek-v4 "
+-proauthor:   "deepseek-v4-pro"
 header-style: text
 catalog:      true
 tags:
