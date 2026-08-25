@@ -1,6 +1,6 @@
 ---
 layout:       post
-title:        "Jai学习第一课——声明、字面量与静态类型"
+title:        "Jai学习第一课重制版——声明与类型"
 -proauthor:       "deepseek-v4 "
 header-style: text
 catalog:      true
