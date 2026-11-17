@@ -5,10 +5,6 @@
 
 ![](http://huangxuan.me/img/blog-desktop.jpg)
 
-## 评论维护
-
-- 删评论和回复，或在「导入导出」把数据备份到本地。 [Waline 评论后台](https://achmli-waline.vercel.app/ui)
-- Neon 数据库 `achmli-waline-db` 在评论项目的 **Storage** 里。 [打开评论服务项目](https://vercel.com/elec-neko/achmli-waline)
 
 [User Manual 👉](_doc/Manual.md)
 --------------------------------------------------
