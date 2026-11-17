@@ -80,6 +80,14 @@ layout: default
             </div>
         {% endunless %}
 
+    <!-- Waline Comments -->
+            {% assign waline_server_url = site.waline_server_url | default: '' | strip %}
+            {% if waline_server_url != '' %}
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    {% include waline_comments.html server_url=waline_server_url %}
+                </div>
+            {% endif %}
+
     <!-- Sidebar Container -->
             <div class="
                 col-lg-8 col-lg-offset-2

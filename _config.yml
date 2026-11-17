@@ -60,6 +60,9 @@ kramdown:
       start_line: 1
   math_engine: mathjax
 
+# Waline comments: set the public server URL after deployment.
+waline_server_url: "https://achmli-waline.vercel.app"
+
 # Disqus settings
 disqus_comment: false
 #disqus_username: hux
