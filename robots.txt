@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /feed.xml
+Disallow: /search.json
+Disallow: /img/
