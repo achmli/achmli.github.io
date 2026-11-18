@@ -7,6 +7,26 @@ layout: default
 
 <!-- Main Content -->
 <div class="container">
+  {% if page.article_directory %}
+  <div class="article-index">
+    <aside>
+      {% include article-directory.html collapse_at=991 %}
+      {% if site.sidebar %}
+        <div class="sidebar-container">
+          {% include short-about.html %}
+          {% include ads.html %}
+        </div>
+      {% endif %}
+    </aside>
+    <div class="postlist-container">
+      {{ content }}
+      <div class="sidebar-container">
+        {% include featured-tags.html %}
+        {% include friends.html %}
+      </div>
+    </div>
+  </div>
+  {% else %}
   <div class="row">
     {% if site.sidebar == false %}
     <!-- NO SIDEBAR -->
@@ -49,6 +69,7 @@ layout: default
     </div>
     {% endif %}
   </div>
+  {% endif %}
 </div>
 
 {% if site.page-mathjax %}

@@ -25,16 +25,10 @@ https://github.com/kitian616/jekyll-TeXt-theme
     return queryObj;
   }
 
-  var setUrlQuery = (function() {
-    var baseUrl =  window.location.href.split('?')[0];
-    return function(query) {
-      if (typeof query === 'string') {
-        window.history.replaceState(null, '', baseUrl + query);
-      } else {
-        window.history.replaceState(null, '', baseUrl);
-      }
-    };
-  })();
+  function setUrlQuery(query) {
+    var location = window.location;
+    window.history.replaceState(null, '', location.pathname + (query || '') + location.hash);
+  }
 
   $(document).ready(function() {
     var $tags = $('.js-tags');
@@ -64,7 +58,9 @@ https://github.com/kitian616/jekyll-TeXt-theme
       if (!_tag) {
         return $tagShowAll;
       }
-      var _buttons = $articleTags.filter('[data-encode="' + _tag + '"]');
+      var _buttons = $articleTags.filter(function() {
+        return this.getAttribute('data-encode') === _tag;
+      });
       if (_buttons.length === 0) {
         return $tagShowAll;
       }
@@ -90,7 +86,7 @@ https://github.com/kitian616/jekyll-TeXt-theme
             result[i] || (result[i] = {});
             result[i][j] = true;
           } else {
-            var tags = $articles.eq(j).data('tags').split(',');
+            var tags = $articles.eq(j).attr('data-tags').split(',');
             for (k = 0; k < tags.length; k++) {
               if (tags[k] === tag) {
                 result[i] || (result[i] = {});
@@ -129,14 +125,17 @@ https://github.com/kitian616/jekyll-TeXt-theme
       }
     }
 
-    var query = queryString(), 
-        _tag = query.tag;
+    var _tag = searchButtonsByTag(queryString().tag).attr('data-encode');
 
     init(); 
     tagSelect(_tag);
+    var timeline = document.getElementById('archive-timeline');
+    if (_tag && timeline && !window.location.hash) {
+      timeline.scrollIntoView();
+    }
 
     $tags.on('click', 'a', function() {   /* only change */
-      tagSelect($(this).data('encode'), $(this));
+      tagSelect($(this).attr('data-encode'), $(this));
     });
 
   });

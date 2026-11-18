@@ -1,0 +1,64 @@
+<details class="article-directory{% if include.archive %} article-directory--archive{% endif %}" open>
+    <summary>文章分类</summary>
+    <nav class="article-directory-body" aria-label="文章分类">
+        {%- for section in site.data.article_directory -%}
+            {%- capture series_list -%}
+                {%- for series in section.series -%}
+                    {%- assign articles = '' | split: ',' -%}
+                    {%- for tag in series.tags -%}
+                        {%- if site.tags[tag] -%}
+                            {%- assign articles = articles | concat: site.tags[tag] -%}
+                        {%- endif -%}
+                    {%- endfor -%}
+                    {%- if articles.size == 0 -%}{%- continue -%}{%- endif -%}
+                    {%- assign sort_field = series.order_by | default: 'date' -%}
+                    {%- assign articles = articles | uniq | sort: sort_field -%}
+                    {%- if series.first_slug -%}
+                        {%- assign first = articles | where: 'slug', series.first_slug -%}
+                        {%- assign remaining = articles | where_exp: 'article', 'article.slug != series.first_slug' -%}
+                        {%- assign articles = first | concat: remaining -%}
+                    {%- endif -%}
+                    {%- assign article_urls = articles | map: 'url' -%}
+                    <details class="article-directory-series"{% if article_urls contains page.url %} open{% endif %}>
+                        <summary>{{ series.title | escape }} <span>{{ articles.size }} 篇</span></summary>
+                        <ol>
+                            {%- for article in articles -%}
+                                {%- assign link_title = article.title -%}
+                                {%- for prefix in series.title_prefixes -%}
+                                    {%- assign prefix_size = prefix | size -%}
+                                    {%- assign title_start = link_title | slice: 0, prefix_size -%}
+                                    {%- if title_start == prefix -%}
+                                        {%- assign link_title = link_title | remove_first: prefix | strip | default: article.title -%}
+                                        {%- break -%}
+                                    {%- endif -%}
+                                {%- endfor -%}
+                                <li>
+                                    <a href="{{ article.url | relative_url }}" title="{{ article.title | escape }}"{% if article.url == page.url %} aria-current="page"{% endif %}>{{ link_title | escape }}</a>
+                                    {%- if article.slug == series.old_slug %} <small>旧版</small>{% endif -%}
+                                </li>
+                            {%- endfor -%}
+                        </ol>
+                    </details>
+                {%- endfor -%}
+            {%- endcapture -%}
+            {%- assign series_list = series_list | strip -%}
+            {%- if series_list != '' -%}
+                <div class="article-directory-section">
+                    {%- if section.series.size > 1 -%}
+                        <p class="article-directory-topic">{{ section.title | escape }}</p>
+                    {%- endif -%}
+                    {{ series_list }}
+                </div>
+            {%- endif -%}
+        {%- endfor -%}
+        <a class="article-directory-archive" href="{% if include.archive %}#archive-timeline{% else %}{{ '/archive/' | relative_url }}{% endif %}">按时间和标签找文章</a>
+    </nav>
+</details>
+<script>
+    (function (directory) {
+        var narrowScreen = window.matchMedia("(max-width: {{ include.collapse_at }}px)");
+        function update() { directory.open = !narrowScreen.matches; }
+        update();
+        if (narrowScreen.addEventListener) narrowScreen.addEventListener('change', update);
+    })(document.currentScript.previousElementSibling);
+</script>

@@ -14,10 +14,14 @@ layout: default
     <div class="container">
         <div class="row">
 
+            <aside class="col-lg-2 col-lg-offset-0 col-md-10 col-md-offset-1 col-xs-12">
+                {% include article-directory.html collapse_at=1199 %}
+            </aside>
+
     <!-- Post Container -->
             <div class="
-                col-lg-8 col-lg-offset-2
-                col-md-10 col-md-offset-1
+                col-lg-8 col-lg-offset-0
+                col-md-10 col-md-offset-1 col-xs-12
                 post-container">
 
                 <!-- Multi-Lingual -->
@@ -84,7 +88,7 @@ layout: default
             <div class="
                 col-lg-8 col-lg-offset-2
                 col-md-10 col-md-offset-1
-                sidebar-container">
+                sidebar-container article-footer-sidebar">
 
                 <!-- Featured Tags -->
                 {% include featured-tags.html bottom=true %}

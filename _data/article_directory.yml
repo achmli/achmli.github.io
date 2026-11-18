@@ -1,0 +1,39 @@
+- title: 课程笔记
+  series:
+    - title: Games101
+      tags: [Games101]
+      order_by: slug
+      title_prefixes: [Games101笔记]
+    - title: Games202
+      tags: [Games202]
+      order_by: slug
+      title_prefixes: [Games202笔记]
+    - title: Games103
+      tags: [Games103]
+      order_by: slug
+      title_prefixes: [Games103笔记]
+    - title: Games106
+      tags: [Games106]
+      title_prefixes: [Games106笔记]
+
+- title: 图形学专题
+  series:
+    - title: 《见证者》技术笔记
+      tags: [《见证者》博客翻译]
+      title_prefixes:
+        - 《见证者》引擎技术博客——
+        - 《见证者》引擎技术博客的扩展阅读——
+    - title: LOD / Impostor
+      tags: [LOD生成, Impostor]
+      title_prefixes: [应该是古早的某种被称为Billboard Clouds的LOD技术-]
+    - title: 阴影小课堂
+      tags: [何同学]
+      title_prefixes: [何同学寒假小课堂——]
+
+- title: Jai 学习
+  series:
+    - title: Jai 学习
+      tags: [Jai]
+      first_slug: Jai-First_Lesson_Remake
+      old_slug: Jai_First_Lesson
+      title_prefixes: [Jai学习]
