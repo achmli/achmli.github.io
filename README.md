@@ -25,6 +25,14 @@ $ bundle install
 $ bundle exec jekyll serve  # alternatively, npm start
 ```
 
+### 本地发文工具
+
+在 Windows 双击 [open-editor.cmd](_tools/blog_editor/open-editor.cmd)，打开 `.md` 或粘贴稿件。填写标题，点「选日期…」打开日历，点「选标签…」多选旧文章的标签或添加新标签。在右侧预览或替换图片，再点「保存到博客」。文章保存在 `_posts`，新图片保存在 `img/in-post`，可以和文章一起用原来的 Git 流程发布。
+
+「系列」和「专题」可以从下拉列表选择，也可以直接输入新名字。系列顺序可以留空，填写时用正整数。
+
+工具使用本机的 Python 和 Tk，依赖 `ruamel.yaml`、`markdown-it-py` 和 `Pillow`。
+
 ### Development (Build From Source)
 
 To modify the theme, you will need [Grunt](https://gruntjs.com/). There are numbers of tasks you can find in the `Gruntfile.js`, includes minifing JavaScript, compiling `.less` to `.css`, adding banners to keep the Apache 2.0 license intact, watching for changes, etc. 
