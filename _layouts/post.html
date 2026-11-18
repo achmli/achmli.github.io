@@ -31,6 +31,10 @@ layout: default
 
 				{{ content }}
 
+                {% if site.comments_preview or site.data.comment_form.form_id %}
+                    {% include post_comments.html %}
+                {% endif %}
+
                 <hr style="visibility: hidden;">
                 <ul class="pager">
                     {% if page.previous.url %}

@@ -1,0 +1,30 @@
+<link rel="stylesheet" href="{{ '/css/post-comments.css' | relative_url }}">
+<section id="post-comments" class="post-comments" aria-labelledby="post-comments-title"
+         data-comment-post="{{ page.url | escape }}"
+         data-comment-title="{{ page.title | escape }}"
+         {% if site.comments_preview %}
+         data-comments-url="{{ '/__comments' | relative_url }}"
+         {% else %}
+         data-comment-endpoint="https://formsubmit.co/ajax/{{ site.data.comment_form.form_id | escape }}"
+         data-comment-threads="{{ site.data.comment_threads[page.url] | jsonify | escape }}"
+         {% endif %}>
+    <h2 id="post-comments-title">留言</h2>
+    <p class="comment-empty">正在读取留言…</p>
+    <ul class="comment-threads"></ul>
+
+    <form class="comment-form">
+        <div class="comment-reply-context" hidden>
+            回复 <span></span>
+            <button class="comment-action" type="button">取消回复</button>
+        </div>
+        <label for="comment-name">昵称 <span>选填</span></label>
+        <input id="comment-name" name="nickname" type="text" maxlength="40" autocomplete="off">
+        <label for="comment-message">留言</label>
+        <textarea id="comment-message" name="message" rows="4" maxlength="2000" required></textarea>
+        <div class="comment-submit-row">
+            <button class="comment-submit" type="submit" disabled>提交留言</button>
+            <p class="comment-status" role="status" aria-live="polite">审核后显示</p>
+        </div>
+    </form>
+</section>
+<script src="{{ '/js/post-comments.js' | relative_url }}" defer></script>

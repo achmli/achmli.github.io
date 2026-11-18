@@ -1,0 +1,132 @@
+.post-comments {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #e0e5e7;
+}
+
+.post-comments h2 {
+    margin: 0 0 1.1rem;
+}
+
+.post-comments p {
+    margin: 0;
+}
+
+.post-comments .comment-empty,
+.post-comments .comment-status,
+.post-comments .comment-meta time,
+.post-comments label span,
+.post-comments .comment-reply-target {
+    color: #536369;
+    font-size: .88em;
+}
+
+.post-comments .comment-threads,
+.post-comments .comment-replies {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.post-comments .comment-threads > li + li {
+    border-top: 1px solid #e0e5e7;
+    margin-top: 1rem;
+    padding-top: 1rem;
+}
+
+.post-comments .comment-meta,
+.post-comments .comment-submit-row,
+.post-comments .comment-reply-context:not([hidden]) {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: .35rem 1rem;
+}
+
+.post-comments .comment-message {
+    margin: .4rem 0;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+.post-comments .comment-meta strong,
+.post-comments .comment-reply-context span {
+    overflow-wrap: anywhere;
+}
+
+.post-comments .comment-replies {
+    margin: .65rem 0 0 .3rem;
+    padding-left: clamp(.8rem, 3vw, 1.6rem);
+    border-left: 2px solid #e0e5e7;
+}
+
+.post-comments .comment-replies li + li {
+    margin-top: .85rem;
+}
+
+.post-comments .comment-action {
+    border: 0;
+    padding: .3rem 0;
+    background: transparent;
+    color: #006a81;
+    font: inherit;
+    text-decoration: underline;
+    text-underline-offset: .15em;
+    cursor: pointer;
+}
+
+.post-comments .comment-form {
+    display: grid;
+    gap: .5rem;
+    margin-top: 1.25rem;
+    padding: clamp(.85rem, 3vw, 1.3rem);
+    border: 1px solid #e0e5e7;
+    border-radius: 6px;
+    background: #f8fafb;
+}
+
+.post-comments .comment-form label {
+    margin: 0;
+}
+
+.post-comments .comment-form input,
+.post-comments .comment-form textarea {
+    box-sizing: border-box;
+    width: 100%;
+    padding: .5rem .6rem;
+    border: 1px solid #9eaeb3;
+    border-radius: 4px;
+    background: #fff;
+    color: inherit;
+    font: inherit;
+}
+
+.post-comments .comment-form input {
+    max-width: 15em;
+}
+
+.post-comments .comment-form textarea {
+    resize: vertical;
+}
+
+.post-comments .comment-submit {
+    padding: .45rem .9rem;
+    color: #fff;
+    background: #006a81;
+    border: 1px solid #006a81;
+    border-radius: 4px;
+    font: inherit;
+    cursor: pointer;
+}
+
+.post-comments .comment-submit:disabled {
+    cursor: default;
+    opacity: .6;
+}
+
+.post-comments button:focus-visible,
+.post-comments input:focus-visible,
+.post-comments textarea:focus-visible {
+    outline: 2px solid #006a81;
+    outline-offset: 2px;
+}
