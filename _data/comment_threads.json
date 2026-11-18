@@ -1,7 +1,14 @@
 {
   "/2026/08/25/Jai-First_Lesson_Remake/": [
     {
-      "replies": [],
+      "replies": [
+        {
+          "id": "0c364e0aad4086c50f25565fe208a68f",
+          "nickname": "这个博客的主人",
+          "body": "回复测试",
+          "received_at": "2026-11-18T13:48:05+00:00"
+        }
+      ],
       "root": {
         "id": "35bdd030920fdf45fdd245302ea17e5e",
         "nickname": "",
