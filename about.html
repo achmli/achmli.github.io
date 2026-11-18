@@ -4,19 +4,16 @@ title: "About"
 description: "「我真是垃圾中的垃圾」"
 header-img: "img/LoneTrail.jpg"
 header-mask: 0.3
-multilingual: true
 ---
 
-{% include multilingual-sel.html %}
-
-<!-- Chinese Version -->
-<div class="zh post-container">
+<div class="post-container" lang="zh-CN">
     {% capture about_zh %}{% include about/zh.md %}{% endcapture %}
     {{ about_zh | markdownify }}
 </div>
 
-
-{% if site.disqus_username %}
+{% if site.comments_preview or site.data.comment_form.form_id %}
+{% include post_comments.html heading="博客留言" %}
+{% elsif site.disqus_username %}
 <!-- disqus 评论框 start -->
 <div class="comment">
     <div id="disqus_thread" class="disqus-thread">

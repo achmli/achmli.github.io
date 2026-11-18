@@ -8,7 +8,7 @@
          data-comment-endpoint="https://formsubmit.co/ajax/{{ site.data.comment_form.form_id | escape }}"
          data-comment-threads="{{ site.data.comment_threads[page.url] | jsonify | escape }}"
          {% endif %}>
-    <h2 id="post-comments-title">留言</h2>
+    <h2 id="post-comments-title">{{ include.heading | default: "留言" | escape }}</h2>
     <p class="comment-empty">正在读取留言…</p>
     <ul class="comment-threads"></ul>
 

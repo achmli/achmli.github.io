@@ -50,7 +50,7 @@ def find_posts(output):
         if article:
             posts[unescape(article[1])] = unescape(article[2])
     if not posts:
-        raise RuntimeError("预览构建中没有找到博文。")
+        raise RuntimeError("预览构建中没有找到可留言的页面。")
     return posts
 
 
@@ -171,7 +171,7 @@ class Moderator(ttk.Frame):
         self.tree.configure(yscrollcommand=scrollbar.set)
         scrollbar.pack(side="right", fill="y")
         self.tree.pack(side="left", fill="both", expand=True)
-        for key, label, width, stretch in (("post", "文章", 245, True), ("name", "昵称", 80, False),
+        for key, label, width, stretch in (("post", "页面", 245, True), ("name", "昵称", 80, False),
                                             ("text", "留言", 300, True)):
             self.tree.heading(key, text=label)
             self.tree.column(key, width=width, minwidth=65, stretch=stretch)
