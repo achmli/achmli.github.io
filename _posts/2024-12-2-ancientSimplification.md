@@ -17,7 +17,7 @@ topic: "LOD / Impostor"
 
 而这块的算法内容就是计算四边形的各个参数，顶点位置、数量、大小之类的。
 
-来自[这个项目](https://github.com/StrongerSuperman/Billboardcloud "StrongerSuperman/Billboardcloud: extreme model simplification in real time game scene")。项目的简介中贴出了论文地址，但除了k-means之外的两篇论文都已经被删除了。
+来自[这个项目](https://github.com/StrongerSuperman/Billboardcloud "StrongerSuperman/Billboardcloud: extreme model simplification in real time game scene")。项目简介里有些论文链接已经失效，[2003 年的 Billboard Clouds 原论文](https://graphics.cs.yale.edu/publications/billboard-clouds-extreme-model-simplification) 还能在作者的页面上找到。
 
 # Original BBC Algorithm
 
@@ -34,7 +34,7 @@ int rho_num = 1.5 / epsilon_percentage;   // suggest value in later paper realiz
 float epsilon = 2 * boundingSphere.radius * epsilon_percentage;
 std::vector<Triangle> trianglesTmp = trianglesOrg;
 
-Discretization discretization(maxDistance, epsilon, theta_num, phi_num, ro_num);
+Discretization discretization(maxDistance, epsilon, theta_num, phi_num, rho_num);
 discretization.updateDensity(trianglesTmp, 0);
 ```
 
@@ -42,7 +42,7 @@ discretization.updateDensity(trianglesTmp, 0);
 
 epsilon 是根据包围球的半径和误差百分比计算出的误差。包围球的大小取决于模型的尺寸。
 
-Discretization 这个类的主要功能就是利用 theta_num、phi_num 和 rho_num 这三个参数生成采样点的位置，或者说是两个球面上相邻的八个点形成的一个块，这里将其称为 bin 。updateDensity这个函数是用来计算每个模型再每个 bin 中的三角形数量。
+Discretization 这个类的主要功能就是利用 theta_num、phi_num 和 rho_num 这三个参数生成采样点的位置，或者说是两个球面上相邻的八个点形成的一个块，这里将其称为 bin 。`updateDensity` 按三角形的投影面积更新每个 bin 的密度。三角形只覆盖一部分 bin 时，还会乘上覆盖的比例。
 
 然后是通过循环去寻找最佳拟合平面。
 
@@ -166,22 +166,22 @@ if (centerPlaneValidSetIndex.size() == validSet.size())
         centerPlane = Plane(-centerPlane.normal, centerPlane.distance);
     }
 
-    // 计算平面上点到平面的最大距离，用于调试
+    // 计算候选三角形的顶点到平面的最大距离，用于调试
     float maxDis = 0.0f;
     for (auto& triangle : validSet)
     {
         float d0 = centerPlane.calcuPointDistance(triangle.p0);
         float d1 = centerPlane.calcuPointDistance(triangle.p1);
         float d2 = centerPlane.calcuPointDistance(triangle.p2);
-        maxDis = std::max({d0, d1, d2});
+        maxDis = std::max({maxDis, d0, d1, d2});
     }
     return centerPlane;
 }
 ```
 
-然后计算这个平面能拟合的三角形集合。方法是计算三角形和这个平面的最大距离，对比允许拟合的最大距离(一般是 bin 的中心与球心的距离)。
+然后用 `computePlaneValidSetIndex` 筛候选三角形。项目里先取三个顶点沿平面法线的投影的绝对值，再把它们的最小值和最大值各向外扩 `epsilon`，检查平面偏移是否落在这个范围内。`roCenter` 是这个候选平面的偏移，`epsilon` 是允许的误差。按论文的误差限制，还要确认三个顶点里离平面最远的那个也在 `epsilon` 以内。
 
-如果 bin 中所有有效的三角形集合都能拟合，那么就返回这个中心平面。
+如果 bin 里所有有效的三角形都通过了项目里的筛选，这段代码就返回中心平面。
 
 ```cpp
 std::vector<Bin> neighborBins = getBinNeighbors(maxDensityBin);
@@ -341,7 +341,7 @@ else {
 原文给出的解决方式是：
 
 1. <b>确定每个簇的最小包围盒</b>，包含簇中所有的三角形，用于计算平面所表示的空间的范围。
-2. <b>检测相交包围盒</b>：确定所有的相交包围盒对，如果两个包围盒彼此相交（即至少有一个顶点位于另一个包围盒内），则认为这些平面可能存在潜在裂缝。
+2. <b>检测相交包围盒</b>。确定所有的相交包围盒对。如果两个轴对齐的盒子在 x、y、z 三个轴上的投影区间都重叠，就算相交。旋转过的盒子可以用分离轴测试。相交的盒子对应的平面之间可能有裂缝。
 3. <b>投影</b>：找到交集区域内的三角形，这些三角形不止投影到原来的平面，也投影到相交的另一个包围盒表示的那个平面。另外如果一个三角形只有一部分在交集内，那么只将交集部分投影到另一个平面上，剩余部分只投影到原来的平面上(原文提到利用模板缓冲实现)。
 
 # 效果对比

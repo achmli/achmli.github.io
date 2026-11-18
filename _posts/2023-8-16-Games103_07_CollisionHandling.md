@@ -96,7 +96,7 @@ BVH内的自相交。
 
 DCD判断每个离散时间是否有相交发生。
 
-对于三角形网格检测边和三角形是否相交。怎么检测，MT算法！
+三角形网格可以测试边与三角形是否相交。对边使用 Möller–Trumbore 算法时，如果射线起点取边的一端，方向取两端点之差，就要把参数 t 限制在 [0, 1]。平行或共面的情形需要另外处理。
 
 ![image-20230725213707812](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/07/Tunneling.png)
 
@@ -108,7 +108,7 @@ DCD判断每个离散时间是否有相交发生。
 
 检测在两个离散的时间之间是否相交。
 
-对于三角形网格，检测顶点和三角形的相交以及边和边的相交，因为可能会发生点和三角形不相交但边和边相加的情况。
+对于三角形网格，检测顶点和三角形的相交以及边和边的相交，因为可能会发生点和三角形不相交但边和边相交的情况。
 
 顶点和三角形检测，求出四个顶点在一个平面上的时候的时间。
 
@@ -147,7 +147,7 @@ DCD判断每个离散时间是否有相交发生。
 
 ![image-20230725223904938](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/07/PointMethods.png)
 
-通过两个点距离的对数给点施加能量，点就获得互斥的力。
+例如可以用 $-k\log d$ 作障碍能量。距离 d 趋近 0 时能量升高，其负梯度产生排斥作用。
 
 ![image-20230725224218869](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/07/InteriorPointMethods.png)
 

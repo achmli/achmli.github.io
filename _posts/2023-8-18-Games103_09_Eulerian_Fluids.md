@@ -33,7 +33,7 @@ topic: "物理模拟与动画"
 
 ![image-20230810152406555](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/09/OnGrid.png)
 
-根据Central Differencing，求在网格上的微分时，只要两个相邻网格的值的差除以网格的边长。
+如果导数求在网格中心，用左右两个中心的值做差并除以 2h。如果导数求在两格之间的共享面上，用这两格中心的值做差并除以 h。
 
 ![image-20230810153416202](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/09/DifferencingGrid.png)
 
@@ -57,7 +57,7 @@ topic: "物理模拟与动画"
 
 每个网格的拉普拉斯算子都等于0。
 
-至少有一个边界是Dirichlet，因为Neumann边界的拉普拉斯算子少了一个变量，矩阵的秩小于矩阵的行数，线性系统就会有无数个解。
+纯 Neumann 边界使常数项无法由方程确定。满足相容条件时，可以固定一个参考值或规定均值为零，得到唯一解。封闭容器的压力求解可用这种处理。
 
 拉普拉斯平滑在模拟里被称为diffusion(扩散？)。
 

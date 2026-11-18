@@ -18,7 +18,7 @@ topic: "图形学基础"
 
 <img src="https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games101/02/image-20230622160257648.png" alt="image-20230622160257648"  />
 
-视口变换就是将坐标轴原点从左下角到中心，将-1到1的范围变成0到width和0到height。
+视口变换将归一化设备坐标的 x、y 从 [−1, 1] 映射到窗口中的 [0, width]、[0, height]（以视口左下角为起点）。原先的坐标原点 (0, 0) 映射到视口中心。
 
 ## 采样
 
@@ -39,7 +39,7 @@ topic: "图形学基础"
 
 # 反走样(抗锯齿)
 
-信号变化速度大于采样速度导致走样。
+对带限信号，采样频率低于信号最高频率的两倍时，就可能发生走样。
 
 <img src="https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games101/02/image-20230622202256034.png" alt="image-20230622202256034"  />
 
@@ -69,7 +69,7 @@ topic: "图形学基础"
 
 ## 卷积
 
-滤波=卷积=平均
+许多常见的线性滤波可以通过卷积实现，均值滤波是其中一种。
 
 <img src="https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games101/02/image-20230622205814917.png" alt="image-20230622205814917"  />
 
@@ -125,7 +125,7 @@ topic: "图形学基础"
 
 但是光栅化周围四个面时，虽然深度相同，但依然需要排序。
 
-无法解决物体之间相互遮挡的问题，所以画家算法只在一个物体相对深度完全相同的情况
+画家算法要求物体或图元可以一致地从远到近排序。遇到循环遮挡时，需要先拆分图元，或逐像素比较深度。
 
 <img src="https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games101/02/image-20230623105140759.png" alt="image-20230623105140759"  />
 

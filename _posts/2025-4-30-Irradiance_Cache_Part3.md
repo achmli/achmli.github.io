@@ -81,7 +81,9 @@ $$ L_o(\mathbf{x},\vec{\omega}_o) = \frac{\rho(\mathbf{x})}{\pi}E(\mathbf{x},\ve
 
 其中$\rho \in [0, 1)$，用于表示漫反射的反射率。$\vec{\mathbf{n}}$则是用来表示表面法线。而irradiance用蒙特卡洛积分计算：
 
-$$ E(\mathbf{x},\vec{\mathbf{n}}) = \int_\Omega L_i(\mathbf{x},\vec{\omega}_i)(\vec{\mathbf{n}} \cdot \vec{\omega}_i) $$
+$$
+E(\mathbf{x},\vec{\mathbf{n}}) = \int_\Omega L_i(\mathbf{x},\vec{\omega}_i)(\vec{\mathbf{n}}\cdot\vec{\omega}_i)\,d\omega_i
+$$
 
 $$ \approx \frac{1}{N} \sum_{i=1}^N \frac{L(\mathbf{x},\vec{\omega}_i)(\vec{\mathbf{n}} \cdot \vec{\omega}_i)}{\rm{pdf}(\vec{\omega}_i)} $$
 
@@ -95,29 +97,38 @@ $$ \epsilon_i^t = \iint_A|E(\mathbf{x}_i+\Delta\mathbf{x})-E^{\prime}(\mathbf{x}
 
 其中A是缓存点的支持域的面积，$ \Delta\mathbf{x} $是切平面上的二维偏差。其中
 
-$$ E^{\prime}(\mathbf{x}_i+\Delta\mathbf{x}) = E_i (\mathbf{x}_i) + \nabla_\mathbf{x} E_i(\mathbf{x}_i) $$
+$$
+E^{\prime}(\mathbf{x}_i+\Delta\mathbf{x})=E_i(\mathbf{x}_i)+\nabla_{\mathbf{x}}E_i(\mathbf{x}_i)\cdot\Delta\mathbf{x}
+$$
 
-其中$ \Delta\mathbf{x} $是irradiance的一阶泰勒展开。
+上式是辐照度在缓存点处的一阶泰勒展开。$\Delta\mathbf{x}$ 是相对于缓存点的位移。
 
 为了让irradiance缓存更加高效，目标是使用尽可能大的支持域A，将误差限制到某个阈值$\epsilon^t$。
 
 由于这个表达式依赖于ground truth的irradiance $E$，但是计算真实的irradiance显然过于复杂和低效，所以通过irradiance的二阶的泰勒展开来估算这个值，最终的表达式中可以将缓存点的误差与irradiance的Hessian矩阵直接关联起来：
 
-$$ \epsilon_i^t = \frac{1}{2}\iint_A|\Delta\mathbf{x^T H_x}(E_i)\Delta\mathbf{x}| d\Delta\mathbf{x} $$
+$$
+\begin{aligned}
+\epsilon_i^t &\approx \frac{1}{2}\iint_A
+  \left\lvert\Delta\mathbf{x}^{\mathsf{T}}\mathbf{H}_\mathbf{x}(E_i)\Delta\mathbf{x}\right\rvert\,d\Delta\mathbf{x} \\
+&\le \frac{1}{2}\iint_A (\lvert\lambda_1\rvert x^2 + \lvert\lambda_2\rvert y^2)\,dy\,dx
+\end{aligned}
+$$
 
-$$ = \frac{1}{2}\iint_A(|\lambda_1|x^2 + |\lambda_2|y^2)dydx$$
-
-其中irradiance的Hessian矩阵是一个2x2的矩阵，用于定义表面切线空间的二阶导数。表达式的第二行是第一行在由缓存点附近的irradiance的主曲率定义的坐标系中的重新表达（Hessian矩阵的特征向量$ \mathbf{v}^{\lambda_1}, \mathbf{v}^{\lambda_2} $对应特征值/曲率$ \lambda_1 , \lambda_2 $）。
+辐照度的 Hessian 是定义在表面切平面上的 2×2 矩阵。选它的特征向量为坐标轴后，二次项变为 $\lambda_1 x^2+\lambda_2 y^2$。对两项分别取绝对值得到上界。
 
 转换到极坐标并执行积分，可以将上面的表达式简化为一个误差函数，该误差函数沿主方向$ \mathbf{v}^{\lambda_1}, \mathbf{v}^{\lambda_2} $的偏差的四次方增长。通过反转此误差函数，最终得到一个椭圆形的缓存点，其半径公式为：
 
-$$ (R_i^{\lambda_1},R_i^{\lambda_2}) \approx \sqrt[4]{\frac{4\epsilon^t}{\pi}}(\sqrt[4]{\frac{1}{\lambda_1}},\sqrt[4]{\frac{1}{\lambda_2}}) $$
+$$
+(R_i^{\lambda_1},R_i^{\lambda_2}) \approx \sqrt[4]{\frac{4\epsilon^t}{\pi}}
+\left(\sqrt[4]{\frac{1}{\lvert\lambda_1\rvert}},\sqrt[4]{\frac{1}{\lvert\lambda_2\rvert}}\right)
+$$
 
 其中$ \epsilon^t $是用户设置的误差阈值。
 
 在不考虑遮挡的Hessian矩阵的论文中他们推导了2D场景中的irradiance cache，并且提出了基于Hessian矩阵的误差控制策略，在假设场景中无遮挡的情况下推导出了一个irradiance的Hessian矩阵。虽然这种基于Hessian矩阵的误差度量方法未来可期，但是在存在遮挡的场景中，它的精度会显著下降。因此他们提出了几何Hessian（Geometric Hessian），这个方法忽视实际的radiance的值，而是提供整个场景的平滑的缓存分布。
 
-几何Hessian在大多数场景中都有很好的表现，但是与split-sphere启发式算法类似，在简介光照发生显著变化时无法自适应地调整采样密度。
+几何Hessian在大多数场景中都有很好的表现，但是与split-sphere启发式算法类似，在间接光照发生显著变化时无法自适应地调整采样密度。
 
 假设场景中有地板与墙壁相邻的部分，如果墙壁是暗色，那么该部分仅需要较低密度的采样，如果墙壁是亮色，那么就需要较高密度的采样。但是几何Hessian与Split-Sphere方法在两种情况下均采用完全相同的采样密度。
 
@@ -145,7 +156,7 @@ $$ (R_i^{\lambda_1},R_i^{\lambda_2}) \approx \sqrt[4]{\frac{4\epsilon^t}{\pi}}(\
 
 解决问题的关键是将场景转换成一个在x点处辐射度相同（radiometrically equivalent）的无遮挡场景，如上图所示。经过这样的转换，修改后的场景中，x点处的irradiance、irradiance梯度以及irradiance的hessian都仍然与原场景相同。
 
-这种等效成立的原因是，x点的irradiance与其可见的均匀漫反射体（uniform diffuse emitter）所张开的立体角直接成正比。因此，当x点发生位移时，irradiance的梯度和hessian都与这个立体角的变化率成正比。上图中，emitter张开的立体角Ω和Ω’都与原场景中相同，所以irradiance和其梯度以及Hessian都必然没有发生改变。对于非常大的位移这不一定是对的，但是这里只考虑微分尺度。
+这种等效成立的原因是，x点的irradiance与其可见的均匀漫反射体（uniform diffuse emitter）所张开的余弦加权立体角成正比。因此，当x点发生位移时，irradiance的梯度和hessian都与这个立体角的变化率成正比。上图中，emitter张开的立体角Ω和Ω’都与原场景中相同，所以irradiance和其梯度以及Hessian都必然没有发生改变。对于非常大的位移这不一定是对的，但是这里只考虑微分尺度。
 
 ![SceneApproximation](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/witness/11/SceneApproximation.png)
 
@@ -165,7 +176,7 @@ $$ \nabla_{\mathbf{x}}E \approx \nabla_{\mathbf{x}}\left(\sum_{j=1}^M L_{\Delta_
 
 $$ \mathbf{H}_{\mathbf{x}}E \approx \mathbf{H}_{\mathbf{x}}\left(\sum_{j=1}^M L_{\Delta_j} F_{\Delta_j}(\mathbf{x})\right) = \sum_{j=1}^M L_{\Delta_j} \mathbf{H}_{\mathbf{x}} F_{\Delta_j}(\mathbf{x}) $$
 
-幸运的是，这样对分层采样的处理不会在位移时引起遮挡变化，因此可以独立地为每个三角形计算形式因子的导数而不用考虑它们相互遮挡带来的影响。（原文中在附录中贴了计算形式因子梯度和Hessian的原论文，我在这里贴一下链接吧。。。分别是[The Irradiance Jacobian for Partially Occluded Polyhedral Sources](https://www.graphics.cornell.edu/pubs/1994/Arv94.pdf)和[ Anexhaustive  error-boundingalgorithmforhierarchical radiosity](https://inria.hal.science/file/index/docid/98630/filename/HS98.pdf)）
+幸运的是，这样对分层采样的处理不会在位移时引起遮挡变化，因此可以独立地为每个三角形计算形式因子的导数而不用考虑它们相互遮挡带来的影响。（原文中在附录中贴了计算形式因子梯度和Hessian的原论文，我在这里贴一下链接吧。。。分别是[The Irradiance Jacobian for Partially Occluded Polyhedral Sources](https://www.graphics.cornell.edu/pubs/1994/Arv94.pdf)和[An Exhaustive Error-Bounding Algorithm for Hierarchical Radiosity](https://inria.hal.science/file/index/docid/98630/filename/HS98.pdf)）
 
 通过上面的表达式计算得到的Hessian是三维的，但我们实际关注的是该矩阵在表面切线空间上的投影（我的好哥哥deepseek翻译的，我确实不是很能理解“whereas we are interested only in the Hessian across the surface on which it was computed”这句话）。为了将3x3的Hessian矩阵投影到这个平面上，定义$ \mathbf{a} = \mathbf{H_x}E(\mathbf{x})\mathbf{u}_1 $ 和 $ \mathbf{b} = \mathbf{H_x}E(\mathbf{x})\mathbf{u}_2 $，其中<b>u</b><sub>1</sub>和<b>u</b><sub>2</sub>是表面切线空间的正交基向量，那么切线空间的Hessian矩阵为：
 
@@ -178,15 +189,15 @@ $$ \mathbf{H_x}^{2 \times 2} =\begin{bmatrix}
 
 ![triangulate](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/witness/11/Triangulation.png)
 
-在构建三角化环境时，需要考虑的是每条采样光线的命中距离和命中位置。遍历所有样本，每两个相邻的样本相连与对应的两条采样光线组成一个三角形。利用上图中的分层中包含的邻接信息可以加速这一过程。网格和入射的radiance信息结合，就能获得x处的三维场景快照（snapshot）。下图展示了cornell box中在红点处构建的采样网格。(这段话是我在读这段时的错误理解，应当是相邻的三个采样点组成一个三角形，而不是相邻的两个采样点与着色点x组成三角形。)
+构建三角化环境时，记录每条采样光线的命中距离和位置。把相邻的三个采样命中点连接成三角形，得到周围几何的近似网格。样本之间的邻接信息可以加速这一过程。将网格与采样到的辐亮度结合，就得到着色点 x 所见场景的快照。下图是 Cornell Box 中在红点处构建的采样网格。
 
 ![Cornell Box](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/witness/11/CornellBoxTriangulate.png)
 
-上图中最重要的特征是链接连接遮挡物的几何表面和墙面的大型三角形。这些多边形编码了采样点x视角中的场景的遮挡信息。尽管这些三角形在空间上跨度较大，但是它们做组成的立体角与其他三角形近似，所以不会导致这部分采样贡献比例过大的情况。然而当x发生位移时，这些大型三角形的立体角会更快地扩大或者缩小，所以存在遮挡变化时会产生较大的梯度和Hessian。
+上图中最重要的特征是连接遮挡物的几何表面和墙面的大型三角形。这些多边形编码了采样点x视角中的场景的遮挡信息。尽管这些三角形在空间上跨度较大，但是它们所张开的立体角与其他三角形近似，所以不会导致这部分采样贡献比例过大的情况。然而当x发生位移时，这些大型三角形的立体角会更快地扩大或者缩小，所以存在遮挡变化时会产生较大的梯度和Hessian。
 
-为了计算irradiance的梯度和Hessian，需要定义刚刚构建的网格体中每个三角形的入射radiance $L_\Delta$。在二维的情况（就半球采样的几何解释中第二张图那样）下，这个值对应于三角形三个顶点中离着色点x最远的顶点中存储的入射radiance。在三维场景中也是同理，但是要选择三角形三个顶点中最远的那一个（2D情况下是两个）（感觉有点诺言诺语了吧。。。不知道2D情况的两个是一个三角形选两个顶点还是两个三角形选一个顶点。。。当然最可能的解释是三角化的Mesh并不包含连接到x的三角形，而是采样点之间连接成的，所以2维情况是，就像图里那样，是虚线线段，所以是两个顶点里选一个，而3D场景就像这部分的第一张图这样，能连成三角形，所以是三个顶点里选一个。）。直观上来说，离x最远的顶点决定了x位移时被移除遮挡的物体的颜色。最早的split-sphere启发式算法用了类似的方法估算层级间遮挡的微分变化，这种方法能够很好地近似真实场景中（存在显著遮挡时）irradiance的一阶与二阶导数。。而不出意外，不考虑遮挡的Hessian的那种方法就与真实情况差别较大。
+需要为网格单元赋予辐亮度 $L_\Delta$。二维图中的单元是线段，从两个采样端点中取离着色点 x 较远的那个。三维中的单元是三角形，从三个顶点中取离 x 最远的那个。这个顶点提供了 x 发生小位移时，原来被遮挡、之后可能露出的表面的颜色。
 
-本文的方法能后隐式地在梯度与Hessian计算中包含遮挡变化，而无需依赖显式处理遮挡的复杂的形式因子计算，同时也能避免因为病理情况（pathological cases）导致结果不可用的情况。同时本文的方法还有一个优势，那就是可以直接使用现成的任意半球采样分布，无需因为采样分布的改变而重新推导算法。另外尽管尝试过标准的经纬度分层采样，当时最后选择了同心映射，因为其生成的采样模式更规则，可以产生更好的结果。
+本文的方法能够隐式地在梯度与Hessian计算中包含遮挡变化，而无需依赖显式处理遮挡的复杂的形式因子计算，同时也能避免因为病理情况（pathological cases）导致结果不可用的情况。同时本文的方法还有一个优势，那就是可以直接使用现成的任意半球采样分布，无需因为采样分布的改变而重新推导算法。另外尽管尝试过标准的经纬度分层采样，当时最后选择了同心映射，因为其生成的采样模式更规则，可以产生更好的结果。
 
 ### 缓存记录有效区域
 
@@ -197,17 +208,25 @@ $$ \mathbf{H_x}^{2 \times 2} =\begin{bmatrix}
 
 为了完成这些，通过将Hessian矩阵除以采样点处的间接irradiance来修改误差公式：
 
-$$ \epsilon^r_i \approx \frac{1}{2} \iint_A \frac{\mathbf{\Delta x^{\top}}\mathbf{H}_\mathbf{x}^{2 \times 2}(E_i)\mathbf{\Delta x}}{E_i} d\mathbf{\Delta x} $$
-
-$$ = \frac{1}{2} \iint_A \left(\frac{|\lambda_1|}{E_i}x^2 + \frac{|\lambda_2|}{E_i}y^2 \right) dydx $$
+$$
+\begin{aligned}
+\epsilon_i^r &\approx \frac{1}{2}\iint_A
+  \frac{\left\lvert\Delta\mathbf{x}^{\mathsf{T}}\mathbf{H}_\mathbf{x}^{2\times2}(E_i)\Delta\mathbf{x}\right\rvert}{E_i}\,d\Delta\mathbf{x} \\
+&\le \frac{1}{2}\iint_A \left(\frac{\lvert\lambda_1\rvert}{E_i}x^2+
+  \frac{\lvert\lambda_2\rvert}{E_i}y^2\right)\,dy\,dx
+\end{aligned}
+$$
 
 在极坐标系下积分并求逆，得到各向异性的缓存记录的半径方程：
 
-$$ \left(R_i^{\lambda_1}, R_i^{\lambda_2} \right) = \sqrt[4]{\frac{4\epsilon^r E_i}{\pi}} \left(\sqrt[4]{\frac{1}{\lambda_1}},  \sqrt[4]{\frac{1}{\lambda_2}} \right) $$
+$$
+(R_i^{\lambda_1},R_i^{\lambda_2}) = \sqrt[4]{\frac{4\epsilon^r E_i}{\pi}}
+\left(\sqrt[4]{\frac{1}{\lvert\lambda_1\rvert}},\sqrt[4]{\frac{1}{\lvert\lambda_2\rvert}}\right)
+$$
 
 ![Error Comparison](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/witness/11/Figure7.png)
 
-其中$ \epsilon^r $是核心误差控制参数。与之前的半径方程的关键差异在于使用了感知遮挡的Hessian，并且缓存被间接irradiance的四次方根缩放（场景中的亮处能比暗处忍受更多的绝对误差）。上图中展示了在Sponza场景中使用相对误差与绝对误差的半径对比。场景中庭院内的墙面有着更亮的间接光照，这使得再计算半径时这部分可以接受更大的误差。对于绝对误差而言，加倍光照的强度就必须要修改采样分布（强制用户手动操作误差阈值才能获得相同的图片），而这在相对误差的方法中是不需要的。在下图中，对比了各向异性的记录和各向同性（通过强制使用两个半径的最小值得到）的记录。各向异性的记录根据局部irradiance曲率自适应调整偏心率，使得在相同的误差阈值下可以使用更少的记录。在实践中，将椭圆缓存记录的长轴限制在短轴的两倍，用来防止irradiance的Hessian矩阵在某一方向曲率几小时可能出现的artifact。
+其中$ \epsilon^r $是核心误差控制参数。与之前的半径方程的关键差异在于使用了感知遮挡的Hessian，并且缓存被间接irradiance的四次方根缩放（场景中的亮处能比暗处忍受更多的绝对误差）。上图中展示了在Sponza场景中使用相对误差与绝对误差的半径对比。场景中庭院内的墙面有着更亮的间接光照，这使得再计算半径时这部分可以接受更大的误差。对于绝对误差而言，加倍光照的强度就必须要修改采样分布（强制用户手动操作误差阈值才能获得相同的图片），而这在相对误差的方法中是不需要的。在下图中，对比了各向异性的记录和各向同性（通过强制使用两个半径的最小值得到）的记录。各向异性的记录根据局部irradiance曲率自适应调整偏心率，使得在相同的误差阈值下可以使用更少的记录。在实践中，将椭圆缓存记录的长轴限制在短轴的两倍，用来防止irradiance的Hessian矩阵在某一方向曲率极小时可能出现的artifact。
 
 ![Anisotropic Comparison](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/witness/11/Figure8.png)
 
@@ -247,19 +266,23 @@ irradiance的梯度$(\nabla_\mathbf{x}E_i,\nabla_\mathbf{\vec{n}}E_i)$、
 
 以及对应的特征向量$(\mathbf{v}_i^{\lambda_1},\mathbf{v}_i^{\lambda_2})$。
 
-之前计算出的$\mathbf{H_x^{2 \times 2}}$特征值分解后得到的特征向量$\mathbf{v}_i^\prime$是由正交基向量$ \mathbf{u_1,u_2} $在切线空间定义的，需要将其转换到世界空间：$ \mathbf{v}_i = [\mathbf{u}_1 \cdot \mathbf{v}_i^\prime,\mathbf{u}_2 \cdot \mathbf{v}_i^\prime] $。
+设切平面内的特征向量为 $$\mathbf v_i^{\prime}=(v_{i,1}^{\prime},v_{i,2}^{\prime})$$。用切平面的正交基将它变回世界空间。
+
+$$
+\mathbf v_i=v_{i,1}^{\prime}\mathbf u_1+v_{i,2}^{\prime}\mathbf u_2
+$$
 
 缓存记录的插值使用修改了权重函数的一阶外推策略（first-order extrapolation strategy）：
 
-$$ E(\mathbf{x,\vec{n}}) \approx \frac{\sum_{i \in S} \mathrm{w}_i(\mathbf{x})(E_i+\nabla_\mathbf{x}E_i \cdot \Delta\mathbf{x}_i + \nabla_\mathbf{\vec{n}}E_i \cdot \Delta\mathbf{\vec{n}}_i)}{\sum \mathrm{w}_i(\mathbf{x})} $$
+$$ E(\mathbf{x,\vec{n}}) \approx \frac{\sum_{i \in S} \mathrm{w}_i(\mathbf{x})(E_i+\nabla_\mathbf{x}E_i \cdot \Delta\mathbf{x}_i + \nabla_\mathbf{\vec{n}}E_i \cdot \Delta\mathbf{\vec{n}}_i)}{\sum_{i\in S} \mathrm{w}_i(\mathbf{x})} $$
 
 其中$\Delta \mathbf{x}_i = \mathbf{x-x_i}$和$ \Delta \mathbf{\vec{n}}_i = \mathbf{\vec{n}} \times \mathbf{\vec{n}}_i $分别是着色点x的平移偏差和法线旋转偏差。
 
-集合S中包含了所有有效的缓存记录，缓存记录有效的条件是与当前着色点x重合且法线偏差不超过最大偏差角$ \Delta \mathbf{\vec{n}_{max}}$。为了计算缓存记录的权重，本文提出一种结合了位移和旋转的权重函数，并在边界时降至0（deepseek的说法是“权重函数$ \mathrm{w}_i(\mathbf{x}) $结合平移误差与旋转误差，采用帐篷滤波器（Tent Filter）平滑衰减至零”）：
+集合 S 包含能参与插值的缓存记录。着色点 x 落在记录的有效区域内，并且法线偏差小于允许角度时，该记录才有正权重。位移权重和旋转权重都会在各自的边界降为零。
 
-$$ \mathrm{w}_i(\mathbf{x}) = k(1-t_\mathbf{x},0,1) \times k(t_\mathbf{\vec{n}},cos\Delta\mathbf{\vec{n}_{max}},1) $$
+$$ \mathrm{w}_i(\mathbf{x}) = k(1-t_\mathbf{x},0,1) \times k(t_\mathbf{\vec{n}},\cos\Delta\mathbf{\vec{n}_{max}},1) $$
 
-其中k就是一个简单的帐篷滤波器，$ k(t,t_{min},t_{max}) = \frac{t-t_{min}}{t_{max}-t_{min}} $。并且
+这里 $k(t,t_{\min},t_{\max})$ 把 $t$ 从区间 $[t_{\min},t_{\max}]$ 线性映射到 $[0,1]$，并将结果限制在这个范围内。下面是位移与法线项。
 
 $$ t_\mathbf{x} = \sqrt{\left[ \frac{\Delta \mathbf{x}_i \cdot \mathbf{v}_i^{\lambda_1}}{R_i^{\lambda_1}} \right]^2 + \left[ \frac{\Delta \mathbf{x}_i \cdot \mathbf{v}_i^{\lambda_2}}{R_i^{\lambda_2}} \right]^2 + \left[ \frac{\Delta \mathbf{x}_i \cdot \mathbf{n}_i}{R_i^{\lambda_1}} \right]^2} $$
 

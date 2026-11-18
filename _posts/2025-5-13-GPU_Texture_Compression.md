@@ -33,13 +33,13 @@ topic: "纹理与压缩"
 
 但是，tools team的优先工作与此不同，所以我最终的工作是参与制作FX Composer。我对此不是很感兴趣，所以2006年，我转到了Developer Technology group。
 
-那时，nv还在和ATI竞争GPU市场的主导地位。虽然又稳固的市场份额，但是nv的真正目标是扩大整个市场。相比于吃到一块蛋糕，更想把蛋糕做大。想象一下如果一个玩家攒机的预算有限，nv的目标是让他把把更多的预算分配到GPU上而不是CPU上。实现这一目标的一种方法是鼓励开发者将工作负载从 CPU 转移到 GPU。（即使只是翻译，我都不想直接翻译这段里面使用的第一人称，太罪恶了黄狗，唉资本。不过其他段落第一人称我都直接翻的，所以文中的“我”都是原作者）
+那时，nv还在和ATI竞争GPU市场的主导地位。虽然有稳固的市场份额，但是nv的真正目标是扩大整个市场。相比于吃到一块蛋糕，更想把蛋糕做大。想象一下如果一个玩家攒机的预算有限，nv的目标是让他把更多的预算分配到GPU上而不是CPU上。实现这一目标的一种方法是鼓励开发者将工作负载从 CPU 转移到 GPU。（即使只是翻译，我都不想直接翻译这段里面使用的第一人称，太罪恶了黄狗，唉资本。不过其他段落第一人称我都直接翻的，所以文中的“我”都是原作者）
 
 这种推动是更广泛的GPGPU（通用GPU计算）运动的一部分。那时CUDA才刚刚发布，还没有集成到图形接口中，而计算着色器更是还没影。吸引到我们的关注的工作负载中有一个就是GPU纹理压缩。
 
 另一个受到关注的是运行时纹理压缩。
 
-2004年4月，Farbrausch发布了.kkrieger，一个打包后大小只有96KB的FPS游戏，因为关卡、模型和纹理都用了程序化生成。但是直到2007年在[fr-041: debris]{https://www.pouet.net/prod.php?which=30244}开发的后期，他们才开始使用实时的DXT压缩来减少显存占用和提升性能。
+2004年4月，Farbrausch发布了.kkrieger，一个打包后大小只有96KB的FPS游戏，因为关卡、模型和纹理都用了程序化生成。但是直到2007年在[fr-041: debris](https://www.pouet.net/prod.php?which=30244)开发的后期，他们才开始使用实时的DXT压缩来减少显存占用和提升性能。
 
 差不多在相同的时间，Allegorithmic正在开发ProFx，这是Substance Designer的前身，一个用于实时程序化纹理生成的中间件。ProFX也包含了一个快速的DXT编码器，使程序纹理在加载时能转换成对GPU友好的格式。
 
@@ -47,7 +47,7 @@ topic: "纹理与压缩"
 
 约翰卡马克一直在谈论megatexture技术，但在2006年，[Jan Paul van Waveren](https://mrelusive.com/)在Intel Software Network上发布他们的[实时DXT压缩实现](https://mrelusive.com/publications/papers/Real-Time-Dxt-Compression.pdf)的细节时，nv的同事们注意到了一个潜在的问题：如果《狂怒》的最终性能是CPU瓶颈，可能会促使玩家升级CPU而不是GPU。这使得GPU上的实时纹理压缩成为了我们的战略重点。
 
-我们遇到的第一个问题是，在D3D 10中，更新一张DXT纹理而不把数据传输回CPU是不可能的。所幸，那段时间OpenGL刚好推出了PBO（pixel buffer object）。尽管不是为我们的目标设计的，PBO提供了一种变通的方法，我们可以将每个块都渲染到一张integer render target上，然后将内容复制到一个PBO中，最后从从PBO中压缩数据，转换成一个DXT压缩纹理。
+我们遇到的第一个问题是，在D3D 10中，更新一张DXT纹理而不把数据传输回CPU是不可能的。所幸，那段时间OpenGL刚好推出了PBO（pixel buffer object）。尽管不是为我们的目标设计的，PBO提供了一种变通的方法，我们可以将每个块都渲染到一张integer render target上，然后将内容复制到一个PBO中，最后把 PBO 中已经压缩的数据上传到 DXT 纹理。
 
 这是我在与 Jan Paul 共同撰写的论文中使用的技术，这些论文的示例仍可在线找到：
 
@@ -66,17 +66,17 @@ topic: "纹理与压缩"
 
 ## OpenGL
 
-过了一年，OpenGL通过[NV_copy_image](https://github.com/KhronosGroup/OpenGL-Registry/blob/main/extensions/NV/NV_copy_image.txt)也支持了这个特性。然而直到2012年，也就是D3D10支持这个功能的六年后，才在OpenGL4.3中通过[ARB_copy_image](https://github.com/KhronosGroup/OpenGL-Registry/blob/main/extensions/ARB/ARB_copy_image.txt)更加广泛地支持这个功能。
+过了一年，OpenGL通过[NV_copy_image](https://github.com/KhronosGroup/OpenGL-Registry/blob/main/extensions/NV/NV_copy_image.txt)也支持了这个特性。然而直到2012年，才在OpenGL4.3中通过[ARB_copy_image](https://github.com/KhronosGroup/OpenGL-Registry/blob/main/extensions/ARB/ARB_copy_image.txt)更加广泛地支持这个功能。
 
 在OpenGL中，与D3D的`CopySubresourceRegion`等效的接口是[glCopyImageSubData](https://registry.khronos.org/OpenGL-Refpages/gl4/html/glCopyImageSubData.xhtml)。与D3D 10中对应的功能类似，它允许从未压缩纹理复制数据到块压缩纹理中，前提是格式兼容，这通常意味着纹素的大小与块的大小相匹配。
 
-这个特性本应该促进GPU纹理压缩在id Tech 5中的使用，使《狂怒》把更多工作负载从CPU转移到GPU上。但是《狂怒》在发行时没有使用GPU纹理压缩，用还是的Jan Paul的论文中描述的基于CPU的方法。
+这个特性本应该促进GPU纹理压缩在id Tech 5中的使用，使《狂怒》把更多工作负载从CPU转移到GPU上。但是《狂怒》在发行时没有使用GPU纹理压缩，用的还是Jan Paul的论文中描述的基于CPU的方法。
 
-那是我已经开始参与《见证者》的开发了，所以是NVIDIA开发者技术团队的Evan Hart重新审视了这个问题并实现了id Tech 5的GPU纹理压缩，基于我所做的基础工作，并解决了将实时GPU压缩集成到引擎中时遇到的所有实际挑战。
+那时我已经开始参与《见证者》的开发了，所以是NVIDIA开发者技术团队的Evan Hart重新审视了这个问题并实现了id Tech 5的GPU纹理压缩，基于我所做的基础工作，并解决了将实时GPU压缩集成到引擎中时遇到的所有实际挑战。
 
 ## OpenGL ES
 
-在我开发[Spark](https://ludicon.com/spark/)之前，我都没有太关注这些特性。由于我把注意力转移到了移动端，我才开始对OpenGL ES特别感兴趣，他通过[GL_EXT_copy_image](https://registry.khronos.org/OpenGL/extensions/EXT/EXT_copy_image.txt)扩展来支持这个功能，并且在OpenGL ES 3.2中已经成为了一个核心特性。
+在我开发[Spark](https://ludicon.com/spark/)之前，我都没有太关注这些特性。由于我把注意力转移到了移动端，我才开始对OpenGL ES特别感兴趣，它通过[GL_EXT_copy_image](https://registry.khronos.org/OpenGL/extensions/EXT/EXT_copy_image.txt)扩展来支持这个功能，并且在OpenGL ES 3.2中已经成为了一个核心特性。
 
 在测试这个特性时，我遇到了一个意外的限制：OpenGL ES不支持rg32ui输出图像布局。在输出64位的块时，必须使用rgba16ui：
 
@@ -115,9 +115,9 @@ glCompressedTexSubImage2D(GL_TEXTURE_2D, dst_level, dst_x, dst_y, width, height,
 
 ![vulkan test](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/witness/15/Android-Vulkan-CmdCopyImage-700x581.png)
 
-最初，我觉得我试着将实时纹理压缩引入android vulkan的努力白费了。所幸还有一些希望。我发现了[KHR_maintenance2](https://registry.khronos.org/vulkan/specs/latest/man/html/VK_KHR_maintenance2.html)扩展，允许创建压缩image的非压缩image view，从而完全消除了复制的需要。这个功能在后续的Vulkan 1.1中被推广为核心特性，而Vulkan 1.1恰号是我们的最低要求，所以这看上去是有前景的方案。
+最初，我觉得我试着将实时纹理压缩引入android vulkan的努力白费了。所幸还有一些希望。我发现了[KHR_maintenance2](https://registry.khronos.org/vulkan/specs/latest/man/html/VK_KHR_maintenance2.html)扩展，允许创建压缩image的非压缩image view，从而完全消除了复制的需要。这个功能在后续的Vulkan 1.1中被推广为核心特性，而Vulkan 1.1恰好是我们的最低要求，所以这看上去是有前景的方案。
 
-可惜，实际才做起来并不简单。由于文档过于简略，我最初的尝试结果是validation error，但在一些努力后，我成功地让它在PC上正确运行了。然而我的乐观没有持续多久，当我开始在移动端开始测试时，结果是灾难性的。下图中左边的两张图来自两个不同的Adreno设备，最右侧的来自一个PowerVR设备：
+可惜，实际操作起来并不简单。由于文档过于简略，我最初的尝试结果是validation error，但在一些努力后，我成功地让它在PC上正确运行了。然而我的乐观没有持续多久，当我开始在移动端开始测试时，结果是灾难性的。下图中左边的两张图来自两个不同的Adreno设备，最右侧的来自一个PowerVR设备：
 
 ![vulkan test 2](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/witness/15/Android-Vulkan-RenderToBlockTexelView-700x516.png)
 
@@ -127,15 +127,15 @@ glCompressedTexSubImage2D(GL_TEXTURE_2D, dst_level, dst_x, dst_y, width, height,
 
 这其中许多问题的根源都是我最初对片段着色器的依赖。在当时，我使用的Hype Engine的版本缺乏对计算着色器的支持，所以我第一个集成实验是使用片段着色器运行编解码器，这意味着我不能像在OpenGL中一样，将压缩后的块输出到buffer中，只能将其渲染到纹理上，必须要使用到`vkCmdCopyImage`。
 
-然而，vulkan也允许使用`vkCmdCopyBufferToImage`来升级块压缩纹理。 实际上，这与上传块压缩纹理的命令是相同的，这意味着这个代码路径在多个供应商的设备上已经经过了充分测试，毫无意外地，它能够完美工作。
+然而，vulkan也允许使用`vkCmdCopyBufferToImage`来更新块压缩纹理。 实际上，这与上传块压缩纹理的命令是相同的，这意味着这个代码路径在多个供应商的设备上已经经过了充分测试，毫无意外地，它能够完美工作。
 
 当使用块压缩纹理imageview时纹理损坏的问题也与片段着色器的使用相关。特别是`VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT`的使用，将这个标志替换为`VK_IMAGE_USAGE_STORAGE_BIT`就完全解决了这个问题。
 
 使这一切正常工作确实充满挑战，并且挑战还被我永远不知道我做错了什么、验证层没有捕捉到错误、不知道是硬件还是软件的问题加强了。所以我将详细解释这个过程：
 
-要创建块-纹素imageview，首先要要用下面几个标志创建一个image：
+要创建块-纹素imageview，首先要用下面几个标志创建一个image：
 
-+ <b>`EXTEND_USAGE`</b>：这允许创建带有`VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT`标志位的块压缩image，尽管这个usage不能正常支持压缩的格式，只要它从块压缩视图中删除即可。
++ <b>`VK_IMAGE_CREATE_EXTENDED_USAGE_BIT`</b>：这允许创建带有`VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT`标志位的块压缩image，尽管这个usage不能正常支持压缩的格式，只要它从块压缩视图中删除即可。
 + <b>`MUTABLE_FORMAT`</b>：这允许我们创建具有不同但兼容格式的image view。
 + <b>`BLOCK_TEXEL_VIEW_COMPATIBLE`</b>：这扩展了兼容格式的列表，包含那些纹素大小与块大小匹配的非压缩格式。
 
@@ -217,7 +217,7 @@ VK_CHECK(vkCreateImageView(device, &image_view_create_info, nullptr, &store_view
 
 Vulkan也提供了`KHR_image_format_list`扩展，在Vulkan1.2中开始支持。这允许你在创建时提供兼容格式的列表。并没有严格要求使用这个扩展，但由于在一些设备上可以提供一些优化，所以推荐使用。
 
-这时一个用法示例：
+这是一个用法示例：
 
 ```cpp
 VkImageFormatListCreateInfo format_list_info = {
@@ -239,7 +239,7 @@ if (physical_device_properties.apiVersion >= VK_API_VERSION_1_2 || supported_ext
 
 ## Direct3D 12
 
-D3D 12也支持D3D 10.1的`CopyResource`接口。但是D3D 12.1中另外提供了创建一个压缩的一个快压缩纹理的Unordered Access View（UAV）。要使用这个功能，首先需要检查设备是否支持`RelaxedFormatCastingSupported`特性：
+D3D12 支持从兼容格式向块压缩纹理复制数据。设备支持 `RelaxedFormatCastingSupported` 时，也可以按兼容的非压缩格式创建无序访问视图（UAV），直接写入块压缩纹理的存储。下面是查询该特性的方法。
 
 ```cpp
 D3D12_FEATURE_DATA_D3D12_OPTIONS12 feature_options12 = {};

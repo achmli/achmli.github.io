@@ -185,10 +185,8 @@ if (!saveComplete)
 {
     for (auto& d : textureAtlas)
     {
-       if (d != nullptr)
-       {
-          free(d);
-       }
+        free(d);
+        d = nullptr;
     }
 }
 textureAtlas.resize(bbs.size());
@@ -196,45 +194,70 @@ textureAtlas.resize(bbs.size());
 
 如果上一次生成的数据尚未保存，就释放掉之前生成的已有的内容。
 
+这几段是三种读回方法，选一种用就行。这里沿用默认的像素打包设置，每个 RGBA 像素占四个字节。
+
 ```cpp
+const GLsizei width = bbsWidthResolution[i];
+const GLsizei height = bbsHeightResolution[i];
+const std::size_t byteCount = static_cast<std::size_t>(width) * height * 4;
+
 glBindFramebuffer(GL_FRAMEBUFFER, bbs[i].frameBuffer);
-textureAtlas[i] = (BYTE *)malloc((int)(bbsWidthResolution[i] * bbsHeightResolution[i] * 4));
+glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
+textureAtlas[i] = static_cast<BYTE*>(malloc(byteCount));
 if (textureAtlas[i] != nullptr)
 {
-    glReadPixels(0, 0, bbsWidthResolution[i], bbsHeightResolution[i], GL_RGBA, GL_UNSIGNED_BYTE, textureAtlas[i]);
+    glReadPixels(0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, textureAtlas[i]);
 }
 glBindFramebuffer(GL_FRAMEBUFFER, 0);
 ```
 
-这之后就是图形库的调用了。
+另外还留了两种方法。读回的尺寸和字节数沿用上面的 `width`、`height` 和 `byteCount`。
 
 ```cpp
-// Method #2: "glGetTexImage" (access violation error?)
+// Method #2: glGetTexImage
 glBindTexture(GL_TEXTURE_2D, bbs[i].texture);
-textureData[i] = (BYTE *)malloc((int)(bbsWidthResolution[i] * bbsHeightResolution[i] * 4));
-if (textureData[i] != nullptr)
+glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
+textureAtlas[i] = static_cast<BYTE*>(malloc(byteCount));
+if (textureAtlas[i] != nullptr)
 {
-  glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_FLOAT, textureData[i]);
+    glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, textureAtlas[i]);
 }
 glBindTexture(GL_TEXTURE_2D, 0);
-
-// Method #3: "PixelBufferObjects" (slightly faster method than the previous two)
-GLuint pbo;
-glGenBuffers(1, &pbo);
-glBindFramebuffer(GL_FRAMEBUFFER, bbs[i].frameBuffer);
-glBindBuffer(GL_PIXEL_PACK_BUFFER, pbo);
-
-// 异步读取帧缓冲的像素数据到 PBO
-glReadPixels(0, 0, bbsWidthResolution[i], bbsHeightResolution[i], GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
-glBindBuffer(GL_PIXEL_PACK_BUFFER, pbo);
-
-void* ptr = glMapBuffer(GL_PIXEL_PACK_BUFFER, GL_READ_ONLY);
-if (ptr) {
-    // 复制数据到 textureAtlas[i]
-    memcpy(textureAtlas[i], ptr, bbsWidthResolution[i] * bbsHeightResolution[i] * 4);
-    glUnmapBuffer(GL_PIXEL_PACK_BUFFER);
-}
-glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
 ```
 
-另外还留了两种方法。大体上也是调用 OpenGL 的功能。
+这里用 `GL_UNSIGNED_BYTE` 与上面的缓冲区大小一致。要是用 `GL_FLOAT`，四个通道就会占 16 个字节。
+
+```cpp
+// Method #3: Pixel Buffer Object
+GLuint pbo;
+glGenBuffers(1, &pbo);
+glBindFramebuffer(GL_READ_FRAMEBUFFER, bbs[i].frameBuffer);
+glBindBuffer(GL_PIXEL_PACK_BUFFER, pbo);
+glBufferData(GL_PIXEL_PACK_BUFFER, static_cast<GLsizeiptr>(byteCount), nullptr, GL_STREAM_READ);
+
+// PBO 已绑定，最后的 nullptr 表示从缓冲区起始位置写入。
+glReadPixels(0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+
+textureAtlas[i] = nullptr;
+if (void* ptr = glMapBuffer(GL_PIXEL_PACK_BUFFER, GL_READ_ONLY))
+{
+    BYTE* pixels = static_cast<BYTE*>(malloc(byteCount));
+    if (pixels != nullptr)
+    {
+        memcpy(pixels, ptr, byteCount);
+    }
+    if (glUnmapBuffer(GL_PIXEL_PACK_BUFFER))
+    {
+        textureAtlas[i] = pixels;
+    }
+    else
+    {
+        free(pixels);
+    }
+}
+glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
+glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
+glDeleteBuffers(1, &pbo);
+```
+
+这里读回后紧接着映射 PBO，映射可能要等待读回完成。想把这段等待挪出当前帧，可以先做别的事，等 GPU 的同步标记就绪了再映射。

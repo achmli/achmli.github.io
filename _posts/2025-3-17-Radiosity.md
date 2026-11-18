@@ -47,13 +47,13 @@ topic: "光照与光线追踪"
 
 人们通常会声称光追器和一些其他的渲染器会生成“照片级真实”的图像。但想象一下如果有人给你看一张典型的光追生成的图像，然后对你说这是一张照片，你大概会说那个人是瞎了。
 
-另外还要注意，在真实世界中，那些没有被直接照射的物体依然是可见的，阴影也不会是完全的黑色。直接光照的渲染器依靠添加氛围光(Ambient Light)项来处理这种情况。所以所有物体都接收一个最低限度的单项光。
+另外还要注意，在真实世界中，那些没有被直接照射的物体依然是可见的，阴影也不会是完全的黑色。直接光照的渲染器依靠添加氛围光(Ambient Light)项来处理这种情况。所以所有物体都接收一个最低限度的环境光。
 
 ## 全局光照
 
 全局光照尝试去克服光线追踪相关的一些问题。光追仅模拟光线在漫反射表面的一次反射。全局光照的渲染器模拟光线在场景中的许多次反射。
 
-每个在光线追踪场景中的物体为了能可以被看到必须被一些光源照亮，而在全局光照场景中的物体可以是只被周围环境照亮的。（译：这真的是我知道的光追吗？）
+每个在光线追踪场景中的物体为了能可以被看到必须被一些光源照亮，而在全局光照场景中的物体可以是只被周围环境照亮的。（译注：这里的比较对象是只计算直接光照的早期光追渲染器。路径追踪也可以计算全局光照。）
 
 ### 全局光照的优缺点
 
@@ -78,11 +78,11 @@ topic: "光照与光线追踪"
 
 最后我将背景设置为白色，来呈现明亮的天空。
 
-### 用全局光照照亮一个简答的场景
+### 用全局光照照亮一个简单的场景
 
 ![room01r](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/witness/9/room01r.jpg)
 
-我在我自己的辐射度算法的渲染器中搭建了相同的场景。为了提供光源，我用[Terragen](https://www.jmeiners.com/web/20130114040312/http://www.planetside.co.uk/)渲染了一张天空的图像，并且将它放置在窗户外面。没有使用其他的光源。没有做其他多余的事情，房间的光照看上去就已经很真实了。
+我在我自己的辐射度算法的渲染器中搭建了相同的场景。为了提供光源，我用[Terragen](https://planetside.co.uk/)渲染了一张天空的图像，并且将它放置在窗户外面。没有使用其他的光源。没有做其他多余的事情，房间的光照看上去就已经很真实了。
 
 有一些有趣的地方值得注意:
 
@@ -200,7 +200,7 @@ topic: "光照与光线追踪"
 
 ### 入射光和出射光(Incident and Excident Light)
 
-在每个pass中，都有必要记录两个其他的值。每个块能有多少光到达和每个块有多少块离开。我将这两个值称为 `incident_light`和 `excident_light`。其中出射光是块的衡量可见性的属性。当我们看向一个块时，出射光就是我们能看到的东西。
+在每个pass中，都有必要记录两个其他的值。每个块能有多少光到达和有多少光从每个块离开。我将这两个值称为 `incident_light`和 `excident_light`。其中出射光是块的衡量可见性的属性。当我们看向一个块时，出射光就是我们能看到的东西。
 
 ```cpp
 incident_light = sum of all light that a patch can see;
@@ -274,7 +274,7 @@ load scene
 
 ### each patch collects light from the scene
 
-<em>每一个块从场景中收集光照</em>：正如我之前在文章中解释的，每个块被周围它能看到的部分照亮。这是通过在这个块所造的视点渲染场景实现的，并且将能它看到的光叠加起来。在下一节我会更加详细地讲解这部分。
+<em>每一个块从场景中收集光照</em>：正如我之前在文章中解释的，每个块被周围它能看到的部分照亮。这是通过从这个块所在的视点渲染场景实现的，并且将能它看到的光叠加起来。在下一节我会更加详细地讲解这部分。
 
 ### calculate excident light from each patch
 
@@ -310,7 +310,7 @@ load scene
 
 想象着将半立方体展开。你还剩下什么呢？一个正方形的图像和四个矩形的图像。中间的正方形图像是从块的视点向正前方渲染的图像。而半立方体其余的四部分分别是将视野方向向上、向下、向左和向右旋转90°。
 
-所以通过将相机放在块的位置，你能很轻松地渲染这些图像，只要将相机的朝向分别向前、向上、向下、向左和向右然后渲染就行。四个边上的图像是被切掉一般的，所以，只需要渲染一半就行了。
+所以通过将相机放在块的位置，你能很轻松地渲染这些图像，只要将相机的朝向分别向前、向上、向下、向左和向右然后渲染就行。四个边上的图像是被切掉一半的，所以，只需要渲染一半就行了。
 
 ## 半立方体图形的补偿
 
@@ -328,7 +328,7 @@ load scene
 
 ![hemicomp](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/witness/9/hemicomp.gif)
 
-每个半球立方体表面像素需乘以"摄像机视线方向与相机到像素的方向的夹角"的余弦值(Pixels on a surface of the hemicube are multiplied by the cosine of the angle between the direction the camera is facing in, and the line from the camera to the pixel. 译：直接复制了ds的翻译，这句话总感觉又歧义，可能还是我英语水平太糟糕了)。
+对半立方体每个纹素，原文用视线与从相机指向该纹素的方向之间的夹角余弦补偿投影失真。（译注：这是纹素立体角计算中的一个因子。还要乘上纹素的面积，并除以它到采样点的距离平方，详见[半立方体渲染和积分](/2025/03/13/Hemi_Cube_Rendering/)的积分小节。）
 
 上图就是用于补偿失真的映射。
 
@@ -400,7 +400,7 @@ load scene
   end procedure
 ```
 
-这个程序选取了场景中的一个点（通常是一个块），沿着发现方向，并且计算到达这个点的光的总数。
+这个程序选取了场景中的一个点（通常是一个块），沿着法线方向，并且计算到达这个点的光的总数。
 
 首先它使用了函数**RenderView**(point, vector, part)渲染半立方体的五个面。函数的参数，`point`是相机的位置、`vector`是相机应该指向的方向，而另一个参数则用于告诉函数应该渲染最终的图像中的哪一部分。这五张半立方体的图像的存储的结构称为 <b>H</b>（下图中最左侧的一列）。
 
@@ -465,7 +465,7 @@ load scene
 
 ![dualPics2](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/witness/9/dualPics2.png)
 
-第一类Pass：检测像素，找到上一步的找到的两个垂直或者水平相邻的像素之间的中间的像素，如果两个像素之间的差大于设定的阈值，那就在中间的像素渲染一般半立方体，如果小于阈值，那就用两个像素的线性插值计算这个像素的值。
+第一类Pass：检测像素，找到上一步的找到的两个垂直或者水平相邻的像素之间的中间的像素，如果两个像素之间的差大于设定的阈值，那就在中间的像素渲染一个半立方体，如果小于阈值，那就用两个像素的线性插值计算这个像素的值。
 
 ![dualPics3](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/witness/9/dualPics3.png)
 
@@ -667,7 +667,7 @@ load scene
 
 这种优化的实现方式可能和你想象的不太一样，但效果很好，能让CPU和GPU并行地工作。GPU处理纹理映射以及通过z-buffer移除被遮挡的表面。而CPU负责处理辐射度算法的其余部分（译：啊？这河里吗）。
 
-据我所知，目前没有GPU能处理浮点光照值，甚至无法处理超过255的光照值（译：啊？）。因此试图让GPU直接渲染包含这种光照的场景没什么意义。但通过巧妙设计，可以让GPU执行纹理映射和和移除被遮挡的表面，通过一个简单快速的循环补回光照计算。
+据我所知，目前没有GPU能处理浮点光照值，甚至无法处理超过255的光照值（译注：这里描述的是原文写作时的固定功能图形硬件。）。因此试图让GPU直接渲染包含这种光照的场景没什么意义。但通过巧妙设计，可以让GPU执行纹理映射和和移除被遮挡的表面，通过一个简单快速的循环补回光照计算。
 
 如果GPU可以向屏幕写入32位像素，那它就能写入表示我们需要的任何内容的32的值。3D硬件无法直接向屏幕写入浮点RGB值，但可以写入32位指针，指向应被渲染的块。完成后，只需读取每个像素的32位值作为地址，定位到对应的块。
 
@@ -709,50 +709,50 @@ load scene
 
 不要相信你的眼睛：它们比你聪明得多。
 
-那么我们能做些什么？既然人们愿意接受照片作为现实的再现，我们可以将渲染器的输出（即场景光线的物理模型）通过类似相机胶片的粗略近似进行处理。我已就此撰写过文章： [Exposure](https://www.jmeiners.com/web/20130114040312/http://freespace.virgin.net/hugo.elias/graphics/x_posure.htm)，此处不再赘述。
+那么我们能做些什么？既然人们愿意接受照片作为现实的再现，我们可以将渲染器的输出（即场景光线的物理模型）通过类似相机胶片的粗略近似进行处理。我已就此撰写过文章： 《Exposure》（原链接已失效），此处不再赘述。
 
 （译：这段同样照抄ds，基本是废话，没啥值得看的。）
 
 ## 参考文献
 
-**[The Solid Map: Methods for Generating a 2­D Texture Map for Solid Texturing](https://www.jmeiners.com/web/20130114040312/http://graphics.cs.uiuc.edu/~jch/papers/pst.pdf)**
+The Solid Map: Methods for Generating a 2-D Texture Map for Solid Texturing（原链接已失效）
 
 如果你想实现你自己的辐射度算法渲染器，这篇论文会非常有用。它探讨了如何将纹理映射均匀且无失真地应用到任意多边形物体表面——这正是辐射度渲染器需要解决的问题。
 
-**[Helios32](https://www.jmeiners.com/web/20130114040312/http://www.helios32.com/)**
+**Helios32**（原链接已失效）
 
 为寻求辐射度渲染功能的开发者提供跨平台解决方案。
 
-**[Radiosity In English](https://www.jmeiners.com/web/20130114040312/http://www.flipcode.com/tutorials/tut_rad.shtml)**
+**[Radiosity In English](https://www.flipcode.com/archives/Radiosity_In_English-The_Basics.shtml)**
 
 如标题所示，这是一篇用英语词汇解释辐射度的文章。我并未理解其内容。
 
-**[Real Time Radiosity](https://www.jmeiners.com/web/20130114040312/http://www.gamedev.net/reference/programming/features/rtradiosity2/)**
+**Real Time Radiosity**（原链接已失效）
 
 这听起来更有吸引力，但似乎没有提供Demo。
 
-**[An Empirical Comparison of Radiosity Algorithms](https://www.jmeiners.com/web/20130114040312/http://www.cs.cmu.edu/~radiosity/emprad-tr.html)**
+**[An Empirical Comparison of Radiosity Algorithms](https://www.cs.cmu.edu/~radiosity/emprad-tr.html)**
 
 一篇优秀的技术文章，对比了矩阵法、渐进法和小波法辐射度算法，由该领域的权威专家撰写。
 
-**[A Rapid Hierarchical Radiosity Algorithm](https://www.jmeiners.com/web/20130114040312/http://graphics.stanford.edu/papers/rad/)**
+**[A Rapid Hierarchical Radiosity Algorithm](https://graphics.stanford.edu/papers/rad/)**
 
 本文提出了一种快速层次化辐射度算法，用于包含大型多边形面片的场景光照计算。
 
-**[KODI&#39;s Radiosity Page](https://www.jmeiners.com/web/20130114040312/http://ls7-www.informatik.uni-dortmund.de/~kohnhors/radiosity.html)**
+**KODI’s Radiosity Page**（原链接已失效）
 
 汇集了大量优质的辐射度相关资源链接。
 
-**[Graphic Links](https://www.jmeiners.com/web/20130114040312/http://web.tiscalinet.it/GiulianoCornacchiola/Eng/GraphicLinks6.htm)**
+**Graphic Links**（原链接已失效）
 
 包含更多优质链接。
 
-**[Rover: Radiosity for Virtual Reality Systems ](https://www.jmeiners.com/web/20130114040312/http://www.scs.leeds.ac.uk/cuddles/rover/)**
+**[Rover: Radiosity for Virtual Reality Systems ](https://tralvex.com/rover/tralvex-thesis.pdf)**
 
 （*强烈推荐*）一篇关于辐射度的学位论文，收录了大量优质文章和该领域论文摘要。
 
-**[Daylighting Design](https://www.jmeiners.com/web/20130114040312/http://www.arce.ukans.edu/book/daylight/daylight.htm)**
+**Daylighting Design**（原链接已失效）
 
 一篇关于自然光的深度研究文章。
 
-（译：这段同样照抄ds，反正链接基本都挂了。）
+（译：这段同样照抄ds，部分参考文献已补上可访问的出处。）

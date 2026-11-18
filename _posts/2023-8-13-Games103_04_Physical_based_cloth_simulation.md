@@ -1,6 +1,6 @@
 ---
 layout:       post
-title:        "Games103笔记04——Physical Based Cloth Simulation"
+title:        "Games103笔记04——Physically Based Cloth Simulation"
 author:       "Fon"
 header-style: text
 catalog:      true
@@ -25,9 +25,9 @@ topic: "物理模拟与动画"
 
 总的而言，能量是拉伸后长度与原长度的差的平方与刚性系数的积除以2 。
 
-而力的大小是能量的导数。大小是拉伸后长度与原长度的差与负的刚性系数的积。
+一维弹簧的力等于势能对位移的负导数。若把伸长定义为正，力为 $-k(\ell-\ell_0)$，其大小为 $k|\ell-\ell_0|$。
 
-左边一维的情况力没有方向，右边二维的力有方向，所以最后要乘上里的方向。两个力大小相同，方向相反(牛顿第三定律)。
+一维情况下用正负号表示方向。二维或三维情况下，还需乘上沿弹簧的单位方向。两端受到的力大小相等、方向相反。
 
 ## 多根弹簧
 
@@ -131,7 +131,7 @@ topic: "物理模拟与动画"
 
 ![image-20230721143802983](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/04/Newton.png)
 
-有多个倒数为1的点时。
+如果存在多个一阶导数为 0 的点呢？
 
 首先二阶导大于0，然后原函数的值最小的那个。
 
@@ -236,8 +236,8 @@ topic: "物理模拟与动画"
 
 ![image-20230721214115065](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/04/Paper.png)
 
-DoFs：degrees of freedoms
+DoFs：degrees of freedom
 
-欧拉方程：边的数量=3x顶点数-3-3x独占的边的数量
+对拓扑为圆盘的三角网格，欧拉公式给出 $V-E+F=1$。边界边数为 B 时，每个三角形的三条边合计满足 $3F=2E-B$，从而 $E=3V-3-B$。
 
-如果所有边都是hard constraints(强约束？)，自由度只有3+独占的的边的数量。
+如果每条边给出一个独立的长度约束，三维位置的自由度计数为 $3V-E=3+B$。

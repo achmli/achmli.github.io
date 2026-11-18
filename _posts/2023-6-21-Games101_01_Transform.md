@@ -54,7 +54,7 @@ topic: "图形学基础"
 
 <img src="https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games101/01/image-20230620214146409.png" alt="image-20230620214146409"  />
 
-点+点=两个点的中点
+在齐次坐标中，两个点的坐标相加后再按齐次分量归一化，得到两点的中点。
 
 ### 仿射变换(齐次坐标下的变换)
 

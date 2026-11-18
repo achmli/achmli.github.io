@@ -31,7 +31,7 @@ topic: "物理模拟与动画"
 
 <strong>M</strong>是质量，因为加速度$\mathbf{a}=\frac{\mathbf{f}}{\mathbf{m}}$,所以速度的更新是上一次的速度与加速度的积分相加。
 
-同理位置的更新是上一次更新的位置与位置的积分相加。
+同理，新位置等于旧位置加上速度在这段时间内的积分。
 
 ### 积分方法
 
@@ -75,7 +75,7 @@ topic: "物理模拟与动画"
 
 1. 太多的冗余，毕竟一个矩阵有9个元素。
 2. 不直观，看了不知道怎么转。
-3. 难以计算时间倒数(旋转的速度)。
+3. 难以计算时间导数(旋转的速度)。
 
 ![image-20230717174259439](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/02/RotationEulerAngle.png)
 
@@ -100,7 +100,7 @@ topic: "物理模拟与动画"
 
 ![image-20230717175703953](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/02/RotationQuat2.png)
 
-<strong>v</strong>表示旋转轴，旋转的角度是θ，长度为1。因此<strong>V<sup>2</sup></strong>的长度是$\sin^2\frac{\theta}{2}$
+设 $\mathbf u$ 为单位旋转轴，$\theta$ 为旋转角。单位四元数为 $q=(\cos(\theta/2),\ \mathbf u\sin(\theta/2))$，虚部长度的平方是 $\sin^2(\theta/2)$。
 
 ![image-20230717180558225](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/02/Rotation.png)
 
@@ -116,7 +116,7 @@ topic: "物理模拟与动画"
 
 <strong>r<sub>i</sub></strong>是原点到旋转点的向量。<strong>Rr<sub>i</sub></strong>是旋转后的点，<strong>f<sub>i</sub></strong>是这个点上施加的力。
 
-在旋转中等效于质量的物理量成为惯性(还是惰性？Inertia)，用<strong>I</strong>表示。
+在旋转中，与质量对应的物理量是转动惯量。三维刚体用惯性张量 I 表示。
 
 Inertia是一个矩阵，首先计算出在旋转前(Reference)状态下的矩阵。
 
@@ -148,15 +148,15 @@ m<sub>i</sub>是质点的质量？ <strong>1</strong>是单位矩阵。
 
 并且<strong>τ<sub>i</sub></strong>的长度与<strong>||Rr<sub>i</sub>||</strong>以及<strong>||f<sub>i</sub>||</strong>成正比，也与<strong>Rr<sub>i</sub></strong>和<strong>f<sub>i</sub></strong>的夹角的正弦sinθ成正比。
 
-## 惯性(惰性)
+## 转动惯量
 
 ![image-20230717214141865](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/02/Inertia.png)
 
 与质量相似。
 
-惯性力描述了对力矩造成的旋转趋势的抵抗。
+惯性张量描述刚体在各方向上对施加力矩的响应。
 
-与质量的不同在于，inertia不是一个常量。
+刚体自身坐标中的惯性张量固定。在世界坐标系下，惯性张量随刚体旋转而变换。
 
 ![image-20230717214323716](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/02/Inertia2.png)
 

@@ -85,7 +85,7 @@ BSDF=BRDF(反射)+BTDF(折射)。
 
 ![image-20230629152756557](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games101/11/image-20230629152756557.png)
 
-各向同性：微表面法线方向不能存在明显规律，积分上均匀随机分布
+对于各向同性材质，绕宏观法线旋转后，微表面法线分布和 BRDF 保持不变。法线的倾角分布仍可随粗糙度变化。
 
 各向异性：微表面具有明确的方向性。
 
@@ -93,7 +93,7 @@ BSDF=BRDF(反射)+BTDF(折射)。
 
 ![image-20230629153002691](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games101/11/image-20230629153002691.png)
 
-相同的材质，在确定入射光和出射光的夹角后，不同方向的入射光和折射方向的brdf不同，这就是各向异性材质。
+相同的材质，在确定入射光和出射光的夹角后，不同方向的入射光和出射方向的brdf不同，这就是各向异性材质。
 
 各向异性的材质的BRDF不止与入射方向和出射方向的相对夹角有关，也与入射方向和出射方向本身的值有关。
 
@@ -106,7 +106,7 @@ BSDF=BRDF(反射)+BTDF(折射)。
 
 ![image-20230629154110957](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games101/11/image-20230629154110957.png)
 
-+ BRDF是可逆的：交换入射方向和初设方向结果是相同的
++ BRDF是可逆的：交换入射方向和出射方向结果是相同的
 + 能量守恒：BRDF不会让光照变强。
 
 ![image-20230629154204271](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games101/11/image-20230629154204271.png)

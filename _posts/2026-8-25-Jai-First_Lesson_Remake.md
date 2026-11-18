@@ -60,7 +60,7 @@ print("% %\n", type_of(explicit), type_of(inferred));
 
 ```jai
 runtime_value := 10;
-// narrow: u8 = runtime_value; // 应编译失败
+// narrowed_runtime: s8 = runtime_value; // 取消注释会因位宽不足编译失败
 
 COMPILE_TIME_VALUE :: 10;
 narrow: u8 = COMPILE_TIME_VALUE; // 应通过
@@ -75,15 +75,15 @@ narrow: u8 = COMPILE_TIME_VALUE; // 应通过
 ```text
 图像宽高
 像素坐标 x、y
-曝光系数
+曝光档数（比如 +1 档）
 ```
 
 输出：
 
 ```text
-归一化 RGB
+归一化并应用曝光后的 RGB
 转换后的 u8 RGB
-每个中间表达式的类型
+用 `type_of` 检查的表达式类型
 ```
 
 要求：
@@ -91,7 +91,7 @@ narrow: u8 = COMPILE_TIME_VALUE; // 应通过
 - 宽高使用编译期常量；
 - x、y 使用显式整数类型；
 - 中间值至少一处使用类型推导；
-- 整数除法前必须显式转换；
+- 归一化时先显式转换成浮点数，再做除法；
 - 使用 `type_of` 输出至少四种表达式类型。
 
 ### 必须使用
@@ -125,7 +125,7 @@ String_Builder
 
 - `:=` 得到运行时变量；
 - `::` 右侧必须在编译期成立；
-- 普通运行时 `s64` 不会自动缩窄为 `u8`；
+- 普通运行时 `s64` 不会自动缩窄为 `s8`；
 - 可表示的编译期整数常量可以用于 `u8`；
 - 整数除法与浮点除法结果不同。
 
@@ -190,7 +190,7 @@ narrow: u8 = COMPILE_TIME_VALUE; // 通过：常量 10 能塞进 u8
 
 ### 3. Jai 的整数和浮点类型
 
-作业 `assignment.jai` 里整数和浮点都摸了一遍：
+文末的作业示例里整数和浮点都摸了一遍。
 
 - `int`（即 `s64`）：`calc_pixel_color` 的 `x`、`y`、`exposure` 参数；
 - `float`（即 `float32`）：`EV`、`r_float`、`g_float`、`b_float`；
@@ -203,23 +203,25 @@ narrow: u8 = COMPILE_TIME_VALUE; // 通过：常量 10 能塞进 u8
 
 ### 5. `type_of` 检查表达式类型
 
-实验和作业都在用 `type_of` 而不是靠猜。作业里一共在五个表达式上用了 `type_of`：
+实验和作业都用 `type_of` 看实际的类型。作业里一共检查了六个表达式。
 
 ```jai
-print("type of SIZE: %\n", type_of(WIDTH));                 // s64
-print("type of corodiante: %\n", type_of(x));               // int，打印为 s64
-print("type of exposure: %\n", type_of(EV));                // float，打印为 float32
+print("type of width: %\n", type_of(WIDTH));               // s64
+print("type of coordinate: %\n", type_of(x));              // int，打印为 s64
+print("type of exposure scale: %\n", type_of(EV));         // float，打印为 float32
+print("type of exponent: %\n", type_of(cast(float64) exposure)); // float64
 print("type of color: % %\n", type_of(r_float), type_of(r_u8)); // float32, u8
 ```
 
-把 `assignment()` 打开后实际运行（`calc_pixel_color(114, 514, 1)`）的输出：
+文末的示例调用 `calc_pixel_color(114, 514, 1)`，会打印下面这几行。
 
 ```text
 color in float: 0.222656 1.003906 0.613281
 color in u8: 57 255 156
-type of SIZE: s64
-type of corodiante: s64
-type of exposure: float32
+type of width: s64
+type of coordinate: s64
+type of exposure scale: float32
+type of exponent: float64
 type of color: float32 u8
 ```
 
@@ -227,8 +229,6 @@ type of color: float32 u8
 
 + `type_of` 打印的是规范类型名：声明里写 `int` 打印 `s64`，写 `float` 打印 `float32`。因为 `int` / `float` 只是 `s64` / `float32` 的别名，`type_of` 拿到的是别名指向的那个类型本身。
 + 中间绿色分量 `g_float` 是 `1.003906`，已经超过 `1.0`，`cast_float_to_u8` 里的 `clamp` 把它压回 `1.0`，所以 `g_u8` 是 `255`。这也是为什么要先 clamp 再 `cast(u8)`。
-
-这样 `type_of` 覆盖了 `s64` / `float32` / `u8`，加上 `cast(float64)` 用到的 `float64`，本课要求接触的类型就齐了。
 
 ### 6. 统一声明语法
 
@@ -248,16 +248,16 @@ calc_pixel_color :: (x: int, y: int, exposure: int) { ... }
 
 按 v3 的要求，失败的例子要单独记下来，不能混进正式程序里。
 
-### 失败一：运行时变量不能缩窄成 u8
+### 失败一：运行时的 s64 不能隐式缩窄成 s8
 
-在 `experiment.jai` 里：
+单独拿下面两行来试。
 
 ```jai
 runtime_value := 10;
-// narraw: u8 = runtime_value; // 取消注释会编译失败
+// narrowed_runtime: s8 = runtime_value; // 取消注释会编译失败
 ```
 
-原因：`runtime_value` 是运行时变量，类型是 `s64`。Jai 不允许把一个“可能是任意大数”的 `s64` 运行时值隐式塞进 `u8`，因为这可能截断、可能溢出。要缩窄，必须自己写 `cast(u8)` 并接受后果。
+`runtime_value` 是 `s64`，两边都是有符号整数。编译器报的是 64 位往 8 位里塞会丢信息。要主动做这个转换，可以写 `cast(s8)`。
 
 ### 失败二：`::` 的右侧必须在编译期成立
 
@@ -271,7 +271,7 @@ max :: cast(s32) random_get_within_range(10.0, 100.0); // 编译失败
 
 ### 失败三（顺手记一下）：失败要失败在你想失败的那件事上
 
-`experiment.jai` 里那条被注释掉的失败行，变量名其实拼成了 `narraw`，而不是 `narrow`。虽然它本来就该失败，但如果想确认“失败原因是缩窄而不是拼写”，得先把名字改对。制造失败时，先确认失败的是目标行为本身。
+我最早把那一行写成了 `narraw: u8 = runtime_value`。变量名只是拼漏了一个字母，编译器实际先报的是两边的符号性不同。上面改用 `s8`，就能单独看位宽检查。制造失败时，先确认失败的是目标行为本身。
 
 ---
 
@@ -302,9 +302,9 @@ max :: cast(s32) random_get_within_range(10.0, 100.0); // 编译失败
 
 作业能跑起来，其实已经提前用了几样后面的东西：
 
-- `#load` / `#import`：`main.jai` 用 `#load` 把实验和作业拼进来，`assignment.jai` 用 `#import "Basic"`、`#import "Math"`。这属于第 11 课（scope 与多文件组织）和第 25 课（module）的内容，这里只当“工具”用。
+- `#import` 用来引入 `Basic` 和 `Math` 两个模块，细节留到第 25 课（module）。之前用来把实验和作业拼起来的 `#load` 会在第 11 课（scope 与多文件组织）再讲。
 - 过程：`cast_float_to_u8`、`calc_pixel_color` 都是过程，而过程的完整语义（参数、返回值、多返回值）要第 3 课才讲。这里只用到“声明、调用、返回一个值”这种最小子集。
-- `clamp`、`floor`、`pow`：来自 `Math` 模块，是别人写好的过程，这里直接调用，不深究实现。
+- `clamp` 来自 `Basic`，`floor` 和 `pow` 来自 `Math`。这几个都是别人写好的过程，这里直接调用。
 - `print` 的 `%` 格式化：真正讲格式化输出是第 8 课，这里只用到最基础的打印。
 
 这些属于“为了把本课知识用起来而借的工具”，不算违反“不依赖后续课程”，因为作业真正要证明的知识点（五种声明、类型推导、字面量默认类型、显式转换）都在本课范围内。
@@ -351,4 +351,44 @@ max :: cast(s32) random_get_within_range(10.0, 100.0); // 编译失败
 
 ### 运行方式
 
-`main.jai` 目前只调用 `experiment1()` 和 `experiment2()`，`assignment()` 被注释掉了（第 8 行）。要看作业输出，把 `//assignment();` 的注释去掉再编译运行即可。
+想复现上面那组结果，把下面的作业示例存成 `assignment.jai`，用 `jai assignment.jai` 编译后运行生成的程序就行。
+
+比如直接算 `114 / 1024` 会得到整数 `0`。示例把坐标和宽高转成浮点数再相除，然后用 `2` 的曝光档数次方乘上结果。
+
+```jai
+#import "Basic";
+#import "Math";
+
+WIDTH :: 1024;
+HEIGHT :: 1024;
+
+cast_float_to_u8 :: (value: float) -> u8 {
+    scaled := clamp(value, 0.0, 1.0) * 255.0;
+    return cast(u8) floor(scaled + 0.5);
+}
+
+calc_pixel_color :: (x: int, y: int, exposure: int) {
+    EV: float = cast(float) pow(cast(float64) 2.0, cast(float64) exposure);
+    r_float := (cast(float) x / cast(float) WIDTH) * EV;
+    g_float := (cast(float) y / cast(float) HEIGHT) * EV;
+    b_float := (r_float + g_float) / 2.0;
+
+    r_u8 := cast_float_to_u8(r_float);
+    g_u8 := cast_float_to_u8(g_float);
+    b_u8 := cast_float_to_u8(b_float);
+
+    print("color in float: % % %\n", r_float, g_float, b_float);
+    print("color in u8: % % %\n", r_u8, g_u8, b_u8);
+    print("type of width: %\n", type_of(WIDTH));
+    print("type of coordinate: %\n", type_of(x));
+    print("type of exposure scale: %\n", type_of(EV));
+    print("type of exponent: %\n", type_of(cast(float64) exposure));
+    print("type of color: % %\n", type_of(r_float), type_of(r_u8));
+}
+
+main :: () {
+    x: int = 114;
+    y: int = 514;
+    calc_pixel_color(x, y, 1);
+}
+```

@@ -22,7 +22,7 @@ topic: "物理模拟与动画"
 
 ![image-20230701220048842](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games101/15/image-20230701220048842.png)
 
-不过不是线性插值。
+关键帧之间可以线性插值，也可以用样条等方法让运动变化更平滑。
 
 # 物理模拟
 

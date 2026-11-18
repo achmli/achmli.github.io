@@ -27,11 +27,11 @@ topic: "物理模拟与动画"
 
 ![image-20230717222007599](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/03/SDFExample.png)
 
-如果是平面，距离函数<em>Φ</em>(<strong>x</strong>)=(<strong>x-p</strong>)·<strong>n</strong>，即平面上任意一点与<strong>x</strong>的向量点乘这个平面的法向量，得到的值就是带符号的距离。这种情况把法线方向视作平面外，法线负方向视作平面内。
+如果是平面，距离函数<em>Φ</em>(<strong>x</strong>)=(<strong>x-p</strong>)·<strong>n</strong>，即平面上任意一点与<strong>x</strong>的向量点乘这个平面的单位法向量，得到的值就是带符号的距离。这种情况把法线方向视作平面外，法线负方向视作平面内。
 
 如果是球，距离函数<em>Φ</em>(<strong>X</strong>)=<strong>||x-c||</strong>-<em>r</em>，即<strong>x</strong>与圆心的距离减去半径，得到的值就是带符号的距离
 
-如果是圆柱，距离函数$ \phi(\mathbf{x})=\sqrt{\lvert \lvert \mathbf{x-p} \rvert \rvert^2-(\mathbf{(x-p)\cdot n})^2}-r $，根号内求的是<strong>x</strong>到圆柱中心轴的距离<strong>||x-p||</strong>是斜边长度<strong>(x-p)·n</strong>是<strong>(x-p)</strong>在中心轴上投影的长度，利用勾股定理，就可以求得<strong>x</strong>到中心轴的距离，再减去半径r得到的值就是带符号的与曲面的距离。
+对于轴线过 $\mathbf p$、单位轴向为 $\mathbf n$、半径为 $r$ 的无限长圆柱，$\phi(\mathbf x)=\sqrt{\lVert\mathbf x-\mathbf p\rVert^2-[(\mathbf x-\mathbf p)\cdot\mathbf n]^2}-r$。根号内利用勾股定理去掉了轴向投影，得到到轴线的距离平方。有限长圆柱还需要考虑端盖。
 
 ![image-20230717223822423](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/03/Intersection.png)
 
@@ -87,7 +87,7 @@ Penalty方法是当距离函数小于0时，在下一次刷新施加一个与“
 
 ![image-20230718094830622](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/03/Impulse.png)
 
-脉冲方法(?)就是把在曲面内部的粒子沿法线方向移动到表面上。
+碰撞响应先将穿入曲面内部的粒子沿法线移回表面，再用冲量更新速度。
 
 ![image-20230718100437996](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/03/Impulse2.png)
 
@@ -103,7 +103,7 @@ Penalty方法是当距离函数小于0时，在下一次刷新施加一个与“
 
 法线方向：$\mathbf{v_N^{new}}\leftarrow - \mu_N\mathbf{v_N}$，法线方向的分量刷新时需要乘上一个负的系数，由于要符合能量守恒，所以<em>μ</em><sub>N</sub>一般在0到1之间
 
-垂直法线方向：$\mathbf{v_T^new}\leftarrow a\mathbf{v_T}$，切线方向的分量只需要乘上一个正的系数，是摩擦导致的切方向的衰减。a的求解应该符合库仑定律，$ a\leftarrow max(1-\mu\_\mathbf{T}(1+\mu\_\mathbf{N})\mathbf{\lvert \lvert v_N \rvert \rvert / \lvert \lvert v_T \rvert \rvert},0) $，<em>μ<sub>T</sub></em>应该是摩擦系数之类的值。
+切向速度更新为 $\mathbf v_T^{\mathrm{new}}=a\mathbf v_T$。若 $\lVert\mathbf v_T\rVert=0$，切向速度仍为零。否则用 $a=\max(1-\mu_T(1+\mu_N)\lVert\mathbf v_N\rVert/\lVert\mathbf v_T\rVert,0)$，其中 $\mu_T$ 是摩擦系数。
 
 # 刚体碰撞
 
@@ -123,7 +123,7 @@ Penalty方法是当距离函数小于0时，在下一次刷新施加一个与“
 
 速度的刷新。
 
-给碰撞时的速度施加一个新的脉冲速度<strong>j</strong>，同时<strong>j</strong>也会有旋转方向的分量，这样就可以刷新顶点的速度。
+接触冲量 j 会同时改变刚体的线速度和角速度，由此更新接触点的速度。
 
 ![image-20230718114955284](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/03/MatrixProduct.png)
 
@@ -144,7 +144,7 @@ Penalty方法是当距离函数小于0时，在下一次刷新施加一个与“
 + 有许多顶点时，求平均值。
 + 可以使用一个补偿<em>μ</em><sub>N</sub>来减少抖动。
 
-## Shape Mapping
+## Shape Matching
 
 ![image-20230718120426400](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/03/BasicIdea.png)
 
@@ -176,7 +176,7 @@ argmin表示使目标函数取最小值时的变量值。
 
 ![image-20230718122841670](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/03/ShapeMatch.png)
 
-Shape Mapping流程。
+Shape Matching流程。
 
 ![image-20230718122937010](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/03/ShapeMapping.png)
 

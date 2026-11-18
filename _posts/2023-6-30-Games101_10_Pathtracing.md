@@ -26,9 +26,9 @@ Monte-Carlo积分是用来算一些复杂的函数的定积分的方法。
 
 ![image-20230628202058542](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games101/10/image-20230628202058542.png)
 
-由于在半球面上积分，所以在均匀采样的时候，pdf恒等于1/2pi，毕竟半球面的面积是2pi。
+如果按立体角在单位半球上均匀采样，概率密度就是 1/(2π)，因为半球覆盖 2π 球面度。
 
-需要随机采样的变量是ωi，因为每次采样的ωi是下一条的ωr，而第一条的ωr是相机与像素的向量，也是固定的，所以ωr实际上是常量。
+在当前着色点，出射方向 ωr 由上一段光路给定。采样的变量是入射方向 ωi。继续追踪时，这条光路在下一次反射处给出新的出射方向。
 
 ![image-20230628202911508](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games101/10/image-20230628202911508.png)
 
@@ -76,7 +76,7 @@ Monte-Carlo积分是用来算一些复杂的函数的定积分的方法。
 
 ### 重要性采样
 
-总之就是直接采样光源。
+这里用直接采样光源作为重要性采样的一种做法，让更可能贡献光照的方向更容易被采到。
 
 ![image-20230628210438943](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games101/10/image-20230628210438943.png)
 

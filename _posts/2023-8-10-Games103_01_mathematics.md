@@ -164,13 +164,13 @@ Gouraud着色通过三角形顶点的颜色的插值获得像素的颜色。
 
 ![SingularValue](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/01/SingularValue.png)
 
-所有的线性变换都可以分解成三部分，即旋转->缩放->旋转。
+任意矩阵的奇异值分解把线性变换表示成正交变换、沿轴缩放、再做一次正交变换。两个正交变换都可能包含反射。
 
 ### 特征值分解
 
 ![EigenValue](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/01/EigenValue.png)
 
-特征值分解是奇异值分解的特殊情况，矩阵<strong>U</strong>不仅是正交矩阵，同时也应该是对称矩阵。
+实对称矩阵 A 可以写成 $A=Q\Lambda Q^\mathsf{T}$，其中 Q 是由单位正交特征向量组成的矩阵。若 A 半正定，非负的特征值也就是奇异值。
 
 ### 对称正定性
 
@@ -180,7 +180,7 @@ Gouraud着色通过三角形顶点的颜色的插值获得像素的颜色。
 
 正定意味着特征值均为正。
 
-可以用对角占优来判断是否是正定，但这只是充分条件。
+实对称矩阵若正对角元且严格对角占优，则是正定矩阵。这是一组充分条件。
 
 s.p.d.必然是可逆的。
 
@@ -222,7 +222,7 @@ LU分解：将矩阵分解成<strong>L</strong>和<strong>U</strong>两部分。
 
 迭代法通常的形式：$\mathbf{x}^{[k+1]}=\mathbf{x}^{[k]}+\alpha\mathbf{M^{-1}}(\mathbf{b-Ax}^{[k]})$
 
-其中<strong>x</strong><sup>[k+1]</sup>为这一次迭代的结果，<strong>x</strong><sup>[k]</sup>为上一次迭代的结果，α是系数，<strong>M</strong><sup>-1</sup>是迭代矩阵，<strong>b-Ax</strong><sup>[k]</sup>是残差，即上一次迭代的结果与最终结果之间的误差。
+其中 $x^{[k+1]}$ 和 $x^{[k]}$ 分别是这一次和上一次迭代的结果，α 是系数，$M^{-1}$ 作用于残差 $r=b-Ax^{[k]}$。残差与解误差 $e=x^*-x^{[k]}$ 的关系是 $r=Ae$。
 
 ![IterativeLinearSolver](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/01/IterativeLinearSolver.png)
 

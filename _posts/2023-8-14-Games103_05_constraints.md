@@ -31,7 +31,7 @@ topic: "物理模拟与动画"
 
 ![image-20230721221306129](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/05/SingleSpring.png)
 
-假设一根弹簧的刚性是无限的，就可以把长度当义成约束，并且定义一个投影函数。
+假设一根弹簧的刚性是无限的，就可以把长度定义成约束，并且定义一个投影函数。
 
 拉伸时，让两个顶点相互靠拢，压缩时，让两个顶点互相远离。
 
@@ -74,7 +74,7 @@ topic: "物理模拟与动画"
 
 首先是顶点自由运动。
 
-然后施加约束，通过投影更新<strong>x</strong>，然后使用新位置减旧位置除以时间步长当作这个时间片里的速度变化更新速度。
+投影约束得到新位置后，用新旧位置之差除以时间步长更新速度，即 $\mathbf v^{\mathrm{new}}=(\mathbf x^{\mathrm{new}}-\mathbf x^{\mathrm{old}})/\Delta t$。
 
 + 没有物理要素。刚性通过迭代次数和网格数间接实现。
 + 速度更新对动态效果十分重要。
@@ -120,7 +120,7 @@ topic: "物理模拟与动画"
 
 ![image-20230721233947517](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/05/AreaLimit.png)
 
-想要的面积除以当前的面积就得到缩放比例，然后对原三角形缩放，就得到了更新后的三角形。
+将目标面积与当前面积之比开平方，得到边长的缩放倍率。以三角形质心为中心等比缩放，面积会按倍率的平方变化。
 
 ![image-20230721234320704](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/05/AreaLimit2.png)
 
@@ -137,17 +137,17 @@ topic: "物理模拟与动画"
 + 对非线性表现很有用。
 + 可以帮助解决locking issue。
 
-# Project Dynamics
+# Projective Dynamics
 
 ![image-20230722105156237](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/05/Projective.png)
 
-project dynamics用投影去定义能量。
+Projective Dynamics用投影去定义能量。
 
 经过计算后，无论是能量还是力都与弹簧直接模拟相同。只是多了中间变量$\mathbf{x}\_{e,i}^{new}-\mathbf{x}\_{e,j}^{new}$。
 
 ![image-20230722112401819](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/05/Explained.png)
 
-只是Project Dynamics的Hessian最终会是一个常数矩阵。
+只是Projective Dynamics的Hessian最终会是一个常数矩阵。
 
 ![image-20230722112653104](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games103/05/ProjectiveSimulation.png)
 

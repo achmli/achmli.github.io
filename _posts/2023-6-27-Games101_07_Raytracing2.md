@@ -1,6 +1,6 @@
 ---
 layout:       post
-title:        "Games101笔记07——Raytrcing Pt.2"
+title:        "Games101笔记07——Ray Tracing Pt. 2"
 author:       "Fon"
 header-style: text
 catalog:      true
@@ -32,11 +32,11 @@ BRDF代表了从入射方向ωi来的光会有多少从出射方向ωr反射出�
 
 ![image-20230627212804121](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games101/07/image-20230627212804121.png)
 
-所有方向入射光的Radiance(即Irradiance)与BRDF的乘积的积分就是这个反射方向的Radiance。
+在半球上把入射辐亮度 $L_i$、BRDF 和余弦权重 $\cos\theta_i$ 的乘积对立体角积分，得到指定出射方向的反射辐亮度。其中 $dE_i=L_i\cos\theta_i\,d\omega_i$。
 
 ![image-20230627213339177](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games101/07/image-20230627213339177.png)
 
-但是一个的出射的Radiance也会成为其他点的入射的Radiance。所以一般需要递归定义。
+但是一个点的出射的Radiance也会成为其他点的入射的Radiance。所以一般需要递归定义。
 
 ## 渲染方程
 

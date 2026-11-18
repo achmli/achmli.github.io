@@ -74,8 +74,10 @@ para = glm::vec4(normal, D);
 ### 将三角形顶点转换到局部坐标系
 
 ```cpp
-glm::vec3 z_axis = bbc[i].normal;
-glm::vec3 x_axis_tmp = glm::vec3(0, 0, 1);
+glm::vec3 z_axis = glm::normalize(bbc[i].normal);
+glm::vec3 x_axis_tmp = glm::abs(z_axis.z) < 0.9f
+    ? glm::vec3(0.0f, 0.0f, 1.0f)
+    : glm::vec3(0.0f, 1.0f, 0.0f);
 glm::vec3 y_axis = glm::normalize(glm::cross(z_axis, x_axis_tmp));
 glm::vec3 x_axis = glm::normalize(glm::cross(y_axis, z_axis));
 glm::mat4 rotateMat;
@@ -86,7 +88,7 @@ rotateMat[3] = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
 glm::mat4 rotateMatReverse = glm::transpose(rotateMat); 
 ```
 
-首先是经典的旋转矩阵构造的方法，将平面的法线作为 z 轴，加上一个简单的临时的 x 轴，叉积获得 y 轴，然后 y 轴与 z 轴叉积获得真正的 x 轴。
+首先是经典的旋转矩阵构造的方法。将平面的单位法线作为 z 轴，和临时轴叉积获得 y 轴，然后 y 轴与 z 轴叉积获得真正的 x 轴。这里在法线接近世界 z 轴时改用世界 y 轴作为临时轴，避免把接近零的叉积拿去归一化。
 
 然后使用三个方向轴就可以很轻松地构造出旋转矩阵，但这里我们需要的是它的逆矩阵，由于旋转矩阵必然是正交的，所以转置和逆相同，我们只需要求它的转置就行。
 
@@ -110,7 +112,7 @@ for (auto& triangleAfterProj : trianglesAfterProj[i])
 
 但毕竟一般不会这么少，就需要用到[旋转卡壳(Rotating Calipers)](https://oi.wiki/geometry/rotating-calipers/)算法，具体的可以点开前面的蓝字看一下 oi wiki 上详细的讲解。
 
-在之前我们已经将所有顶点都转换到了局部空间，其中构造局部坐标系时，z 轴使用的是平面的法线，这意味着投影后的坐标再转换后 z 的值一定为0。所以这时候我们就可以只保留每个点的 x 和 y 的值了。
+在之前我们已经将所有顶点都转换到了局部空间。因为 z 轴用的是平面的法线，同一平面上的点转过去后 z 值相同。所以算矩形时只用 x 和 y 就够了，把矩形转回三维时再带上这个共同的 z 值。
 
 这么做是因为旋转卡壳是一个二维的算法。作用是找到二维点集的最小外接矩形。
 
@@ -118,13 +120,13 @@ for (auto& triangleAfterProj : trianglesAfterProj[i])
 
 首先是计算所有点的[凸包(Convex_Hull)](https://oi.wiki/geometry/convex-hull/)，感兴趣依然可以选择点开链接看 oi wiki 上详细的讲解。
 
-这里用的是 graham's algorithm ，首先找到所有点中位于左下角的点(优先看 y 的值，有多个点的 y 同样是最小时选择其中 x 值最小的)作为基准点 x<sub>base</sub>，将剩余的点按照与基准点的极角的大小排序。点 (x<sub>i</sub>, y<sub>i</sub>)与基准点的极点用下面的方法计算：
+这里用的是 graham's algorithm ，首先找到所有点中位于左下角的点(优先看 y 的值，有多个点的 y 同样是最小时选择其中 x 值最小的)作为基准点 (x<sub>base</sub>, y<sub>base</sub>)，将剩余的点按照与基准点的极角的大小排序。点 (x<sub>i</sub>, y<sub>i</sub>) 的极角可以用 `atan2` 算。
 
-$$ \theta = arctan \left(\frac{y_i - y_{base}}{x_i - x_{base}}\right) $$
+$$ \theta = \operatorname{atan2}(y_i - y_{base}, x_i - x_{base}) $$
 
-排序后，所有的点按照逆时针顺序排列。
+排序后，所有的点按照逆时针顺序排列。极角相同的点按到基准点的距离从近到远排。
 
-然后将极点和极角最小的点(排序后在除基准点外在最前的点)作为起始凸包顶点。按排序后的顺序遍历剩余的点。第二近加入凸包的点 P<sub>1</sub> ，最近加入凸包的点 P<sub>2</sub>，和遍历到的点P<sub>3</sub>，用geCross函数计算三个点组成的向量的叉积。
+然后将基准点和排序后的第一个点作为起始凸包顶点，依次遍历剩余的点。用 `geCross` 计算栈中最后两个点 P<sub>1</sub>、P<sub>2</sub> 和当前点 P<sub>3</sub> 的叉积。
 
 ```cpp
 float geCross(point2d p1, point2d p2, point2d p3) {
@@ -132,7 +134,7 @@ float geCross(point2d p1, point2d p2, point2d p3) {
 }
 ```
 
-如果得到的结果大于0，说明 P<sub>3</sub> 在 (P<sub>2</sub> - P<sub>1</sub>) 的逆时针方向，将 P<sub>3</sub> 加入到凸包的顶点中，如果为0，就是三点共线，如果小于0，就是在顺时针方向，这两种情况依然会将 P<sub>3</sub> 加入顶点，但是会将 P<sub>2</sub> 从凸包中剔除。这样遍历完成后，就完成凸包的构建了。
+如果叉积大于 0，就是左转，可以把 P<sub>3</sub> 入栈。叉积等于 0 是共线，小于 0 是右转。这两种情况都要弹出栈顶的 P<sub>2</sub>，再用新的栈顶两点继续判断。直到左转或栈里不足两个点，才把 P<sub>3</sub> 加进去。这样遍历完就得到凸包了。
 
 + <b>初始化</b>
 
@@ -146,7 +148,7 @@ float geCross(point2d p1, point2d p2, point2d p3) {
 
 主循环的逻辑是遍历凸包的每一条边，作为矩形的底边。
 
-然后遍历凸包中所有的点，找到与当前的边点积的只最大的点，作为当前底边的右边界点(right)。
+然后遍历凸包中所有的点，找到与当前边的点积最大的点，作为当前底边的右边界点(right)。
 
 然后计算找到凸包中所有点中与当前底边叉积最大的点，作为当前底边垂直方向的边界点(up)。
 

@@ -22,9 +22,9 @@ topic: "阴影"
 
 浮点精度会导致self shadowing之类的问题。
 
-解决方法都是通过添加偏移bias，但是bisa的数值没选好容易产生阴影悬浮也被称为Peter Panning的问题。
+解决方法都是通过添加偏移bias，但是bias的数值没选好容易产生阴影悬浮也被称为Peter Panning的问题。
 
-还有最后就是Shadow map不支持半透明物体。估计和半透明物体计算阴影的方法也有关系，但是最主要的原因估计还是和深度检测类似半透明需要深度图存储多个深度，而且数量是不可知的，这就没办法解决了。
+传统只保存最近表面深度的 Shadow Map，只能判断是否有遮挡。要表现半透明阴影，还得记录或近似光穿过遮挡物后的透射率。
 
 ![ShadowFiltering](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/ClassmateHe/Shadow/ShadowFiltering.png)
 
@@ -48,7 +48,7 @@ msm就是拟合的阶数的不同，低阶是vsm，高阶就是msm了。工业�
 
 我去，又是VSM。UE的SM5和SM6的的一个差别好像就是VSM。
 
-应该是一张巨大的virtual Shadow Map覆盖住整个场景，同时将场景划分为许多快，当需要某一块的Shadow map时先查询显存(?)，如果已经有了就直接使用，没有就需要一些其他的操作(看PS中的内容，应该是缺块就在显存空闲块上或者需要被替换的快上绘制这一块的深度，而不是类似于虚拟内存通过CPU与硬盘换块，不需要有GPU与CPU的数据传输，速度可以更快)
+应该是一张巨大的virtual Shadow Map覆盖住整个场景，同时将场景划分为许多块，当需要某一块的Shadow map时先查询显存(?)，如果已经有了就直接使用，没有就需要一些其他的操作(看PS中的内容，应该是缺块就在显存空闲块上或者需要被替换的快上绘制这一块的深度，而不是类似于虚拟内存通过CPU与硬盘换块，不需要有GPU与CPU的数据传输，速度可以更快)
 
 ![PerObjShadow](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/ClassmateHe/Shadow/PerObjShadow.png)
 
@@ -76,7 +76,7 @@ UE中每个Actor都可以设置投射阴影之类的选项。
 
 烘焙Shadow Map需要消耗比较大的存储空间，所以可以划分区域，记录每个区域中的物体的ID，当玩家走到这块区域时，生成这些物体的Shadow Map，
 
-然后重点在于区域大小的划分，如果划分大了，那生成一次Shadow Map需要的Drawcall依然会很多，二划分小了，会相对浪费存储空间，并且定位玩家在哪个区域的开销也会增大。
+然后重点在于区域大小的划分，如果划分大了，那生成一次Shadow Map需要的Drawcall依然会很多，而划分小了，会相对浪费存储空间，并且定位玩家在哪个区域的开销也会增大。
 
 ![ShadowCache](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/ClassmateHe/Shadow/ShadowCache.png)
 
@@ -140,7 +140,7 @@ UE中每个Actor都可以设置投射阴影之类的选项。
 
 ![Kamac](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/ClassmateHe/Shadow/Kamac.png)
 
-上图是失败的情况，其实就是近平面阴影体积內时，射线就无法射出阴影体积了，相交册数就会比正确情况少1，奇偶判断就会出错。
+上图是失败的情况，其实就是近平面阴影体积內时，射线就无法射出阴影体积了，相交次数就会比正确情况少1，奇偶判断就会出错。
 
 约翰卡马克则是换了个思路，将测试成功和失败的对应的操作交换一下，就相当于朝相当于无限深的远平面投射线了，结果就正确了。
 

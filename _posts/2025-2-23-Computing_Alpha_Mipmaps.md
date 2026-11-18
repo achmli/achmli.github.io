@@ -29,7 +29,7 @@ topic: "纹理与压缩"
 
 ![near_nocoverage-512x320](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/witness/6/near_nocoverage-512x320.png)
 
-但当我们离远一点，树叶开始消失，看上变得稀疏：
+但当我们离远一点，树叶开始消失，看上去变得稀疏：
 
 ![mid_nocoverage-512x320](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/witness/6/mid_nocoverage-512x320.png)
 
@@ -47,7 +47,7 @@ topic: "纹理与压缩"
 
 为了定位问题，理解为什么这些几何体会消失至关重要。在标准的mipmap的alpha通道的计算算法中，每张mipmap的alpha test覆盖率都不一样，就是通过alpha test的像素的比例变化了，在大多数情况下这个比例都是在降低，导致纹理变得透明。
 
-> <em>real-time rendering 4th</em>: 这可以用这样一个例子来进行解释：假设我们现在有一个具有四个alpha值的一维纹理，即(0.0,1.0,1.0,0.0)；而在平均之后，下一个mipmap层级所对应的纹素值会变为(0.5,0.5)，最高层级mipmap所对应的纹素值为(0.5)。现在，假设我们现在使用\alpha_t = 0.75来作为alpha测试的阈值。当访问第0级的mipmap时，4个纹素中的2个可以通过alpha测试，不会被丢弃。但是，当访问剩下两个mipmap层级时，由于0.5 < 0.75，因此所有纹素都会被丢弃。
+> <em>real-time rendering 4th</em>: 这可以用这样一个例子来进行解释：假设我们现在有一个具有四个alpha值的一维纹理，即(0.0,1.0,1.0,0.0)；而在平均之后，下一个mipmap层级所对应的纹素值会变为(0.5,0.5)，最高层级mipmap所对应的纹素值为(0.5)。现在，假设我们现在使用$\alpha_t = 0.75$来作为alpha测试的阈值。当访问第0级的mipmap时，4个纹素中的2个可以通过alpha测试，不会被丢弃。但是，当访问剩下两个mipmap层级时，由于0.5 < 0.75，因此所有纹素都会被丢弃。
 
 一个简单的解决方案是找到使alpha test的覆盖率尽可能接近最初的纹理的缩放因子。首先我们定义第一张mipmap的覆盖率：
 
@@ -75,7 +75,7 @@ Sum(a_i > a_r) / N == coverage
 scale = A_r / a_r
 ```
 
-这个算法的实现已经在[NVTT](http://code.google.com/p/nvidia-texture-tools/)公开。相关的代码能在下面两个[FloatImage](http://code.google.com/p/nvidia-texture-tools/source/browse/trunk/src/nvimage/FloatImage.cpp)类中的函数中找到：
+这个算法的实现已经在 [NVTT](https://github.com/castano/nvidia-texture-tools) 公开。相关代码可以在 [`FloatImage`](https://github.com/castano/nvidia-texture-tools/blob/master/src/nvimage/FloatImage.cpp) 的下列两个函数中找到。
 
 ```cpp
 float FloatImage::alphaTestCoverage(float alphaRef, int alphaChannel) const;
@@ -107,7 +107,7 @@ while (image.buildNextMipmap(nvtt::MipmapFilter_Kaiser))
 
 ![far_coverage-512x320](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/witness/6/far_coverage-512x320.png)
 
-注意这个问题不止在使用alpha test时出现，在使用alpha to coverage（就像截图中那样）（译：没能理解，只是计算覆盖率？还是反向的alpha test？）或者普通的alpha blending也会有这个问题。在这些情况下，虽然没有alpha阈值，但只要选择一个接近于1的值，这个算法依然有效——因为本质上你想要的是保持像素的比例接近于不透明。
+这种方法也能用在 alpha-to-coverage（如截图所示）或普通的 alpha blending。alpha-to-coverage 会用透明度决定 MSAA 的覆盖样本掩码。在这两种情况下没有固定的 alpha 测试阈值，但可选择接近 1 的参考值，尽量保持接近不透明的纹素比例。
 
 （译：还是看看rtr4怎么解释alpha to coverage吧。。。。）
 

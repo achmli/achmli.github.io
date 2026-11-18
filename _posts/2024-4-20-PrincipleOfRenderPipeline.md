@@ -74,14 +74,14 @@ Swapchain是扩展功能，而不是核心渲染功能，因为输出到屏幕�
 不同的顶点间的绘制方式，只绘制点，或者绘制线，或者绘制三角型……
 + DrawCall
 <img src="https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Pics-Games106/DrawCall.png" style="zoom:75%" />
-调用drawcall的方式。如果没有索引缓存就调用Draw，如果有就调用Draw Index，而在顶点数量或者顶点属性未知需要另外计算时，就需要indirect，将direct draw的返回值作为缓存输入GPU。
+无索引绘制可用 vkCmdDraw，有索引绘制可用 vkCmdDrawIndexed。间接绘制从缓冲读取绘制参数，例如顶点数或实例数。参数可由 CPU 写入，也可以在 GPU 上生成。
 ### 光栅化
 + 顶点着色器编译
   <img src="https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Pics-Games106/Compiler.png" style="zoom:75%" />
   顶点着色器通过编译生成SPIR-V才能使用。glsl和hlsl都行。
 + 坐标系
   <img src="https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Pics-Games106/Coordinate.png" style="zoom:75%" />
-  Vulkan的坐标系，可以看出来是右手系，x轴朝左，y轴朝下。目的是为了Z轴朝向屏幕内，OpenGL的z轴朝向屏幕外，所以裁剪空间现在-1到0计算，再移动到0到1，而计算机浮点数计算的误差导致这里可能出现偏差（离零近精度高，离1近精度低），所以Vulkan做出了这个调整。
+Vulkan 默认的裁剪空间深度范围是 $0\le z_c\le w_c$，透视除法后 NDC 深度为 [0, 1]。OpenGL 默认裁剪条件为 $-w_c\le z_c\le w_c$，NDC 深度为 [−1, 1]。Vulkan 帧缓冲的 x 向右，使用正高度的视口时 y 向下。视图空间的手性由应用选用的变换决定。
 + 绘制的一些属性设置
   <img src="https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Pics-Games106/States.png" style="zoom:75%" />
 + 视口

@@ -1,6 +1,6 @@
 ---
 layout:       post
-title:        "Games101笔记05——ShaowMap"
+title:        "Games101笔记05——Shadow Map"
 author:       "Fon"
 header-style: text
 catalog:      true
@@ -15,7 +15,7 @@ topic: "阴影"
 
 <img src="https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games101/05/image-20230625165952619.png" alt="image-20230625165952619" style="zoom:100%;" />
 
- Shadow Mapping只能处理点光源。
+Shadow Mapping 可以用于方向光、聚光灯和点光源。全向点光源一般需要覆盖多个方向的深度图。
 
 ## 从光源渲染
 
@@ -29,7 +29,7 @@ topic: "阴影"
 
 将相机能看到的点投影回光源，可以了解点对应在上一步生成的深度图中的哪个像素。
 
-对比点的深度和深度图的深度，如果相等，则不在阴影中，深度不同，则光源被阻挡，在阴影中。
+比较当前点的光源空间深度和深度图记录的最前表面深度。在常规的深度约定下，前者超过后者加上偏移量时，当前点才处在阴影中。
 
 # 缺点
 

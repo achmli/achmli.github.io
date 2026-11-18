@@ -30,7 +30,7 @@ topic: "光照与光线追踪"
 
 ![image-20230629160932916](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games101/12/image-20230629160932916.png)
 
-分别从光源和相机出发获得半路径，最终两条半路径的端点在一个点相连获得一条路径，就叫双向路径追踪(BDRT)。
+分别从光源和相机出发获得半路径，最终两条半路径的端点在一个点相连获得一条路径，就叫双向路径追踪(BDPT)。
 
 ### Metropolis光线传播
 
@@ -68,7 +68,7 @@ topic: "光照与光线追踪"
 
 BDPT可能会产生两条半路径的端点不能相连但很接近的情况。利用光子映射将两个点融合/结合在一起。
 
-### 实时辐射度(IR)
+### 即时辐射度(IR)
 
 ![image-20230629163357477](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games101/12/image-20230629163357477.png)
 

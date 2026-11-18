@@ -28,7 +28,7 @@ topic: "光照与光线追踪"
 
 Radiant Energy：电磁辐射的能量。符号是Q，单位是焦耳。
 
-Radiant Flux：功率，单位时间里光散发，反射，传输或者吸收的能量。 符号是Φ，单位是瓦特，也可以用流明。
+Radiant Flux（辐射通量）是单位时间发射、反射、传输或吸收的辐射能量，符号为 Φ，单位为瓦特（W）。对应的光度学量是光通量，单位为流明（lm）。
 
 <img src="https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games101/08/image-20230627172207579.png" alt="image-20230627172207579"  />
 
@@ -40,7 +40,7 @@ Radiant Intensity:光源在单位时间内在单位立体角发出的光的能�
 
 <img src="https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games101/08/image-20230627172819942.png" alt="image-20230627172819942"  />
 
-单位立体角(微分立体角)： θ和Φ分别是单位立体角ω与x轴y轴的夹角。
+微分立体角描述极角 θ 和方位角 φ 附近的一小束方向。θ 是与极轴的夹角，φ 是垂直于极轴的平面内的方位角。
 
 <img src="https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games101/08/image-20230627173345053.png" alt="image-20230627173345053"  />
 
@@ -52,7 +52,7 @@ Radiant Intensity:光源在单位时间内在单位立体角发出的光的能�
 
 Irradiance：单位面积的功率(Flux)(不管是吸收的还是反射的，就是不考虑怎么用，单纯收到的所有能量)
 
-E(x) 恒等于dΦ(x)/dA，单位是W/m^2(或者lux=lm/m^2)。
+E(x)=dΦ(x)/dA，单位是 W/m²。对应的光度学量是照度，单位是 lx（lm/m²）。
 
 ### Irradiance Fallout
 
@@ -62,27 +62,27 @@ E(x) 恒等于dΦ(x)/dA，单位是W/m^2(或者lux=lm/m^2)。
 
 ![image-20230627204327673](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games101/08/image-20230627204327673.png)
 
-Radiance：某个单位面积收到来自某个方向的单位立体角的功率(Flux)。即某个方向的单位立体角的Irradiance。或者是某个单位面积收到的Intensity。
+Radiance（辐亮度）是沿某个方向传播的辐射通量，除以该方向的微分立体角和垂直于该方向的投影面积。
 
-符号是L，单位是W/sr m^2(或者nit=lux/sr=cd/m^2)。
+符号是 L，单位是 W/(m²·sr)。对应的光度学量是亮度，单位是 cd/m²（nit）。
 
 ### Incident Radiance
 
 ![image-20230627204859531](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games101/08/image-20230627204859531.png)
 
-单位面积里从某个方向到达的功率(Flux)。
+沿某个方向入射、按单位投影面积和单位立体角计量的辐射通量。
 
 ### Exiting Radiance
 
 ![image-20230627205038448](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games101/08/image-20230627205038448.png)
 
-单位面积上从某个方向离开的功率(Flux)。
+沿某个方向出射、按单位投影面积和单位立体角计量的辐射通量。
 
 ### Irradiance和Radiance对比
 
 ![image-20230627205201935](https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games101/08/image-20230627205201935.png)
 
-Irradiance是Radiance的半球面积分。可以说Irradiance是这个点上所有Radiance的总和。
+Irradiance 是入射辐亮度在入射半球上的加权积分：$E=\int_{\Omega^+} L_i\cos\theta\,d\omega$。余弦因子来自面积投影。
 
-Radiance有明确的方向，Irradiance是所有方向上的总和，所以不考虑方向。
+Radiance 带有方向。Irradiance 把入射方向按余弦权重积分，得到表面该点接收到的通量密度。
 

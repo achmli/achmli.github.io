@@ -36,7 +36,7 @@ topic: "图形学基础"
 + 构造刚体几何：通过几何体之间的并交补之类的运算得到复杂图形
 + 距离函数：不直接描述表面，而是描述任意一点到物体表面的最短距离
 
-<img src="https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games101/04/image-20230624170810190.png" alt="image-20230624170810190" style="zoom:50%;" />
+<img src="https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games101/04/image-20230624170741348.png" alt="利用距离函数混合两个隐式表面" style="zoom:50%;" />
 
 + 水平集：找到填满数的格子中值(或插值)为0的地方作为边界或表面。
 
@@ -67,7 +67,7 @@ t是从0到1的任意时刻，b0‘的位置在b0b1长度的t倍处，b1’在b1
 
 <img src="https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games101/04/image-20230624211816667.png" alt="image-20230624211816667" style="zoom:100%;" />
 
-点的数量越多，需要计算的次数越多，知道最后只剩下一个点。
+点的数量越多，需要计算的次数越多，直到最后只剩下一个点。
 
 ### 贝塞尔曲线线性方程表示
 
@@ -78,7 +78,7 @@ n+1个控制点。
 ### 贝塞尔曲线性质
 
 + 起点是第一个控制点，终点是最后一个控制点。
-+ 四个点时，起点的斜率是3(b1-b0),终点的斜率是3(b3-b2)。
++ 三次贝塞尔曲线在起点和终点对参数 t 的导数分别是 3(b1−b0) 和 3(b3−b2)。
 + 仿射变换时用四个点表示和直接用曲线不会发生结果的差异。
 + 曲线一定在控制点形成的凸包内。
 
@@ -136,17 +136,17 @@ n+1个控制点。
 
 ### Catmull-Clark细分
 
-可惜细分非三角形的面。
+可以细分非三角形的面。
 
 <img src="https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games101/04/image-20230625160543265.png" alt="image-20230625160543265" style="zoom:100%;" />
 
 把面分为四边形面和非四边形面。
 
-通过顶点的度分辨，度为4的点是非奇异点，其余的点为奇异点。新增的点位奇异点相邻的变的中点以及相邻非四边形面的中间点，将新顶点相连。
+对闭合网格，每个原面生成一个面点，每条原边生成一个边点，每个原顶点更新位置，再把它们连接成四边形。度为 4 的顶点是规则点，其余是奇异点。
 
 <img src="https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games101/04/image-20230625160923746.png" alt="image-20230625160923746" style="zoom:100%;" />
 
-新增的奇异点的数量等于细分前非四边形面的数量，但是细分后不再有非四边形面。之后再进行细分就不会新增奇异点数量，同时也不会有非四边形面。
+面点的度等于原面的边数，所以新产生的奇异面点来自原来的非四边形面。细分后全是四边形，后续细分不会因此再产生新的奇异点。
 
 <img src="https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games101/04/image-20230625161519681.png" alt="image-20230625161519681" style="zoom:100%;" />
 

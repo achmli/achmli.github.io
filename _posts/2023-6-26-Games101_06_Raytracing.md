@@ -19,17 +19,17 @@ topic: "光照与光线追踪"
 
 <img src="https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games101/06/image-20230626212531239-2.png" alt="image-20230626212531239"  />
 
-从相机追踪到一个像素，如果有物体，则追溯到光源，已验证是否有阴影。
+从相机追踪到一个像素，如果有物体，则追溯到光源，以验证是否有阴影。
 
 ## 递归(whitted)光线追踪
 
 <img src="https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games101/06/image-20230626213122580.png" alt="image-20230626213122580"  />
 
-光线在经过折射和反射后与物体的焦点依然要判断光源的可见性。
+光线在经过折射和反射后与物体的交点依然要判断光源的可见性。
 
-## 光线和物体表面的相互
+## 光线和物体表面的相互作用
 
-光线：光源(vec3),方向(vec3)
+光线：起点(vec3),方向(vec3)
 
 ###  球
 
@@ -61,13 +61,13 @@ topic: "光照与光线追踪"
 
 <img src="https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games101/06/image-20230626220429196.png" alt="image-20230626220429196"  />
 
-将物体用包围盒包裹，先与包围盒求交，如果相交，在于物体的三角形面求交。
+将物体用包围盒包裹，先与包围盒求交，如果相交，再与物体的三角形面求交。
 
 ### 包围盒与光线求交
 
 一般使用AABB包围盒，因为AABB包围盒的面都与坐标轴平行或者正交。所以对光线而言，三维向量也只需要考虑其中一个变量，相当于线性方程。以平行于yz轴的平面的面为例，只需要考虑x方向即可
 
-平面的x减去光源的x除以归一化的方向的x就是相交的时间了，非常简单。
+平面的x减去射线起点的 x除以归一化的方向的x就是相交的时间了，非常简单。
 
 <img src="https://raw.githubusercontent.com/achmli/achmli.github.io/master/img/Games101/06/image-20230626220955478.png" alt="image-20230626220955478"  />
 
@@ -83,7 +83,7 @@ topic: "光照与光线追踪"
 
 离开包围盒时间小于0：不相交，包围盒在光线方向的背面。
 
-离开时间大于0且进入时间大于0：相交，光线起点在包围盒内。
+如果进入时间不大于 0、离开时间不小于 0，射线起点在包围盒内或边界上。进入和离开时间都大于 0 时，交点在起点前方。
 
 ### 相交的条件
 
