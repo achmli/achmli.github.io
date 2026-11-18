@@ -8,6 +8,9 @@ tags:
     - Games103
     - 图形学
     - 物理模拟
+series: "Games103"
+series_order: 4
+topic: "物理模拟与动画"
 ---
 
 

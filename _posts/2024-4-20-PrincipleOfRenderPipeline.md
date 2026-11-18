@@ -8,6 +8,9 @@ tags:
     - Games106
     - Vulkan
     - 图形学
+series: "Games106"
+series_order: 1
+topic: "实时渲染管线"
 ---
 
 # 传统RHI和现代RHI的区别

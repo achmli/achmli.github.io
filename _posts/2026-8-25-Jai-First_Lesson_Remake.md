@@ -6,6 +6,9 @@ header-style: text
 catalog:      true
 tags:
     - Jai
+series: "Jai 学习"
+series_order: 1
+topic: "Jai 编程"
 ---
 
 > 重制版，之前写到第二课感觉ai设计的课程不太合理，所以让gpt重新设计了一版

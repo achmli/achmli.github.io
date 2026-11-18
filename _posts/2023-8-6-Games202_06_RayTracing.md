@@ -7,6 +7,9 @@ catalog:      true
 tags:
     - Games202
     - 图形学
+series: "Games202"
+series_order: 6
+topic: "光照与光线追踪"
 ---
 
 RTX做了什么？

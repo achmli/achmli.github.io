@@ -8,6 +8,9 @@ tags:
     - LOD生成
     - 图形学
     - Impostor
+series: "Billboard Clouds"
+series_order: 4
+topic: "LOD / Impostor"
 ---
 
 在完成了几何上的简化后，也需要生成简化后的模型能使用的纹理。

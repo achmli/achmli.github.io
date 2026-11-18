@@ -7,6 +7,9 @@ catalog:      true
 tags:
     - 《见证者》博客翻译
     - 图形学
+series: "《见证者》技术笔记"
+series_order: 9
+topic: "光照与光线追踪"
 ---
 > 这篇是在半立方体渲染和积分那篇中提到的Hugo Elias的文章。
 >

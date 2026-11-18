@@ -34,7 +34,7 @@
 }
 
 .article-directory[open] > summary::after,
-.article-directory-series[open] > summary::after {
+.article-directory-group[open] > summary::after {
     transform: rotate(45deg);
 }
 
@@ -47,35 +47,62 @@
     font-weight: 700;
 }
 
-.article-directory-section {
-    border-top: 1px solid #e0e5e7;
-    margin-top: 8px;
-    padding-top: 8px;
+.article-directory-tabs:not([hidden]) {
+    display: flex;
+    gap: 4px;
+    margin: 6px 0 8px;
+    padding: 3px;
+    border-radius: 5px;
+    background: #eaf0f2;
 }
 
-.article-directory .article-directory-topic {
-    margin: 0 0 2px;
-    color: #59646a;
-    font-size: 13px;
+.article-directory-tabs button {
+    flex: 1;
+    padding: 4px 6px;
+    border: 0;
+    border-radius: 3px;
+    background: transparent;
+    color: inherit;
+}
+
+.article-directory-tabs button[aria-selected="true"] {
+    background: #fff;
+    color: #006a81;
     font-weight: 700;
+    box-shadow: 0 1px 2px #d2dade;
 }
 
-.article-directory-series summary span,
-.article-directory-series small {
+.article-directory-tabs button:focus-visible,
+.article-directory summary:focus-visible {
+    outline: 2px solid #006a81;
+    outline-offset: 1px;
+}
+
+.article-directory .article-directory-heading {
+    margin: 8px 0 4px;
+    font-size: 13px;
+}
+
+.article-directory-panel[role="tabpanel"] .article-directory-heading {
+    display: none;
+}
+
+.article-directory-group summary span,
+.article-directory-group small {
     color: #59646a;
     font-size: 12px;
     margin-left: 3px;
     white-space: nowrap;
 }
 
-.article-directory-series ol {
+.article-directory-group ul {
     list-style: none;
     margin: 0 0 5px;
     padding-left: 12px;
     border-left: 1px solid #dce4e8;
 }
 
-.article-directory-series a {
+.article-directory-group a {
     display: inline-block;
     padding: 4px 0;
     color: #414c52;
@@ -109,14 +136,11 @@
 }
 
 @media (min-width: 768px) {
-    .article-directory--archive .article-directory-body {
+    .article-directory--archive .article-directory-groups {
         display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        align-items: start;
         gap: 0 20px;
-    }
-
-    .article-directory--archive .article-directory-archive {
-        grid-column: 1 / -1;
     }
 }
 

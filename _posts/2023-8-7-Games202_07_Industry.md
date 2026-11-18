@@ -7,6 +7,9 @@ catalog:      true
 tags:
     - Games202
     - 图形学
+series: "Games202"
+series_order: 7
+topic: "实时渲染管线"
 ---
 
 

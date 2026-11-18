@@ -8,6 +8,9 @@ tags:
 
    - Games101
    - 图形学
+series: "Games101"
+series_order: 6
+topic: "光照与光线追踪"
 ---
 
 

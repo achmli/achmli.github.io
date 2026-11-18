@@ -7,6 +7,9 @@ catalog:      true
 tags:
     - Games101
     - 图形学
+series: "Games101"
+series_order: 1
+topic: "图形学基础"
 ---
 
 

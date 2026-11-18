@@ -7,6 +7,9 @@ catalog:      true
 tags:
     - Games101
     - 图形学
+series: "Games101"
+series_order: 7
+topic: "光照与光线追踪"
 ---
 
 # BRDF(双向反射分布函数)

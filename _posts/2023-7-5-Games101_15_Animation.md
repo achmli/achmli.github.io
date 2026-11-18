@@ -7,6 +7,9 @@ catalog:      true
 tags:
     - Games101
     - 图形学
+series: "Games101"
+series_order: 15
+topic: "物理模拟与动画"
 ---
 
 

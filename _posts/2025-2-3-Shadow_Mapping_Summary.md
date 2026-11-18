@@ -7,6 +7,9 @@ catalog:      true
 tags:
     - 《见证者》博客翻译
     - 图形学
+series: "《见证者》技术笔记"
+series_order: 4
+topic: "阴影"
 ---
 > 因为十分喜欢《见证者》，所以想试着翻译一下他们的技术博客。
 >

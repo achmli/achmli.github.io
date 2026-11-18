@@ -7,6 +7,9 @@ catalog:      true
 tags:
     - 《见证者》博客翻译
     - 图形学
+series: "《见证者》技术笔记"
+series_order: 16
+topic: "纹理与压缩"
 ---
 
 

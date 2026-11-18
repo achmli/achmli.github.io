@@ -6,6 +6,9 @@ header-style: text
 catalog:      true
 tags:
     - Jai
+series: "Jai 学习"
+series_order: 2
+topic: "Jai 编程"
 ---
 
 > 总之是一份Jai学习笔记。

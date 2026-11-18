@@ -7,6 +7,9 @@ catalog:      true
 tags:
     - Games202
     - 图形学
+series: "Games202"
+series_order: 4
+topic: "光照与光线追踪"
 ---
 
 

@@ -1,55 +1,64 @@
-<details class="article-directory{% if include.archive %} article-directory--archive{% endif %}" open>
+{%- assign current_series = page.series | default: '' -%}
+{%- assign current_topic = page.topic | default: '' -%}
+<details class="article-directory{% if include.archive %} article-directory--archive{% endif %}"{% if current_series == '' and current_topic != '' %} data-show-topic{% endif %} open>
     <summary>文章分类</summary>
     <nav class="article-directory-body" aria-label="文章分类">
-        {%- for section in site.data.article_directory -%}
-            {%- capture series_list -%}
-                {%- for series in section.series -%}
-                    {%- assign articles = '' | split: ',' -%}
-                    {%- for tag in series.tags -%}
-                        {%- if site.tags[tag] -%}
-                            {%- assign articles = articles | concat: site.tags[tag] -%}
-                        {%- endif -%}
-                    {%- endfor -%}
-                    {%- if articles.size == 0 -%}{%- continue -%}{%- endif -%}
-                    {%- assign sort_field = series.order_by | default: 'date' -%}
-                    {%- assign articles = articles | uniq | sort: sort_field -%}
-                    {%- if series.first_slug -%}
-                        {%- assign first = articles | where: 'slug', series.first_slug -%}
-                        {%- assign remaining = articles | where_exp: 'article', 'article.slug != series.first_slug' -%}
-                        {%- assign articles = first | concat: remaining -%}
-                    {%- endif -%}
-                    {%- assign article_urls = articles | map: 'url' -%}
-                    <details class="article-directory-series"{% if article_urls contains page.url %} open{% endif %}>
-                        <summary>{{ series.title | escape }} <span>{{ articles.size }} 篇</span></summary>
-                        <ol>
-                            {%- for article in articles -%}
-                                {%- assign link_title = article.title -%}
-                                {%- for prefix in series.title_prefixes -%}
-                                    {%- assign prefix_size = prefix | size -%}
-                                    {%- assign title_start = link_title | slice: 0, prefix_size -%}
-                                    {%- if title_start == prefix -%}
-                                        {%- assign link_title = link_title | remove_first: prefix | strip | default: article.title -%}
-                                        {%- break -%}
-                                    {%- endif -%}
-                                {%- endfor -%}
-                                <li>
-                                    <a href="{{ article.url | relative_url }}" title="{{ article.title | escape }}"{% if article.url == page.url %} aria-current="page"{% endif %}>{{ link_title | escape }}</a>
-                                    {%- if article.slug == series.old_slug %} <small>旧版</small>{% endif -%}
-                                </li>
+        <div class="article-directory-tabs" role="tablist" aria-label="分类方式" hidden>
+            <button type="button" role="tab" id="article-directory-tab-series" aria-controls="article-directory-series">系列</button>
+            <button type="button" role="tab" id="article-directory-tab-topic" aria-controls="article-directory-topic">专题</button>
+        </div>
+        {%- assign directory_fields = 'series,topic' | split: ',' -%}
+        {%- for field in directory_fields -%}
+            {%- assign groups = site.posts | group_by: field | sort_natural: 'name' -%}
+            <section id="article-directory-{{ field }}" class="article-directory-panel">
+                <h2 class="article-directory-heading">{% if field == 'series' %}系列{% else %}专题{% endif %}</h2>
+                <div class="article-directory-groups">
+                    {%- for group in groups -%}
+                        {%- assign name = group.name | strip -%}
+                        {%- if name == empty -%}{%- continue -%}{%- endif -%}
+                        {%- if field == 'series' -%}
+                            {%- assign positions = group.items | sort: 'series_order', 'last' | group_by: 'series_order' -%}
+                            {%- assign articles = '' | split: ',' -%}
+                            {%- assign unnumbered = '' | split: ',' -%}
+                            {%- for position in positions -%}
+                                {%- assign dated = position.items | sort: 'date' -%}
+                                {%- if position.name == empty -%}
+                                    {%- assign unnumbered = dated -%}
+                                {%- else -%}
+                                    {%- assign articles = articles | concat: dated -%}
+                                {%- endif -%}
                             {%- endfor -%}
-                        </ol>
-                    </details>
-                {%- endfor -%}
-            {%- endcapture -%}
-            {%- assign series_list = series_list | strip -%}
-            {%- if series_list != '' -%}
-                <div class="article-directory-section">
-                    {%- if section.series.size > 1 -%}
-                        <p class="article-directory-topic">{{ section.title | escape }}</p>
-                    {%- endif -%}
-                    {{ series_list }}
+                            {%- assign articles = articles | concat: unnumbered -%}
+                        {%- else -%}
+                            {%- assign articles = group.items | sort: 'date' -%}
+                        {%- endif -%}
+                        {%- assign article_urls = articles | map: 'url' -%}
+                        <details class="article-directory-group"{% if article_urls contains page.url %} open{% endif %}>
+                            <summary>{{ name | escape }} <span>{{ articles.size }} 篇</span></summary>
+                            <ul>
+                                {%- for article in articles -%}
+                                    {%- assign settings = site.data.article_directory.series[article.series] -%}
+                                    {%- assign link_title = article.title -%}
+                                    {%- if field == 'series' -%}
+                                        {%- for prefix in settings.title_prefixes -%}
+                                            {%- assign prefix_size = prefix | size -%}
+                                            {%- assign title_start = link_title | slice: 0, prefix_size -%}
+                                            {%- if title_start == prefix -%}
+                                                {%- assign link_title = link_title | remove_first: prefix | strip | default: article.title -%}
+                                                {%- break -%}
+                                            {%- endif -%}
+                                        {%- endfor -%}
+                                    {%- endif -%}
+                                    <li>
+                                        <a href="{{ article.url | relative_url }}" title="{{ article.title | escape }}"{% if article.url == page.url %} aria-current="page"{% endif %}>{{ link_title | escape }}</a>
+                                        {%- if article.slug == settings.old_slug %} <small>旧版</small>{% endif %}
+                                    </li>
+                                {%- endfor -%}
+                            </ul>
+                        </details>
+                    {%- endfor -%}
                 </div>
-            {%- endif -%}
+            </section>
         {%- endfor -%}
         <a class="article-directory-archive" href="{% if include.archive %}#archive-timeline{% else %}{{ '/archive/' | relative_url }}{% endif %}">按时间和标签找文章</a>
     </nav>
@@ -60,5 +69,43 @@
         function update() { directory.open = !narrowScreen.matches; }
         update();
         if (narrowScreen.addEventListener) narrowScreen.addEventListener('change', update);
+
+        var tablist = directory.querySelector('[role="tablist"]');
+        var tabs = Array.from(tablist.querySelectorAll('[role="tab"]'));
+        var panels = tabs.map(function (tab) {
+            var panel = document.getElementById(tab.getAttribute('aria-controls'));
+            panel.setAttribute('role', 'tabpanel');
+            panel.setAttribute('aria-labelledby', tab.id);
+            return panel;
+        });
+
+        function selectTab(index) {
+            tabs.forEach(function (tab, position) {
+                var selected = position === index;
+                tab.setAttribute('aria-selected', selected);
+                tab.tabIndex = selected ? 0 : -1;
+                panels[position].hidden = !selected;
+            });
+        }
+
+        tabs.forEach(function (tab, index) {
+            tab.addEventListener('click', function () { selectTab(index); });
+            tab.addEventListener('keydown', function (event) {
+                var target;
+                switch (event.key) {
+                    case 'ArrowLeft': target = (index + tabs.length - 1) % tabs.length; break;
+                    case 'ArrowRight': target = (index + 1) % tabs.length; break;
+                    case 'Home': target = 0; break;
+                    case 'End': target = tabs.length - 1; break;
+                    default: return;
+                }
+                event.preventDefault();
+                selectTab(target);
+                tabs[target].focus();
+            });
+        });
+
+        selectTab(directory.hasAttribute('data-show-topic') ? 1 : 0);
+        tablist.hidden = false;
     })(document.currentScript.previousElementSibling);
 </script>

@@ -7,6 +7,9 @@ catalog:      true
 tags:
     - 《见证者》博客翻译
     - 图形学
+series: "《见证者》技术笔记"
+series_order: 12
+topic: "光照与光线追踪"
 ---
 
 > 这篇是在之前的[Irradiance Cache续](https://achmli.github.io/2025/03/27/Irradiance_Caching_Continued/)中提到的 <em>the witness</em>中没采用的更先进的误差控制方法的论文。

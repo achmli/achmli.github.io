@@ -8,6 +8,9 @@ tags:
     - LOD生成
     - 图形学
     - Impostor
+series: "Billboard Clouds"
+series_order: 1
+topic: "LOD / Impostor"
 ---
 
 就是生成 Billboard Cloud 的算法，这当中几乎所有算法都是用若干四边形的平面替换掉原模型，原模型的顶点投影到邻近的四边形上，这样许多三角形就合成了两个三角形。

@@ -8,6 +8,9 @@ tags:
     - LOD生成
     - 图形学
     - Impostor
+series: "Billboard Clouds"
+series_order: 3
+topic: "LOD / Impostor"
 ---
 
 在将三角形分配完并且有了最佳拟合平面后，怎么把三角形投影到平面上，并且把平面变成我们想要的网格就是新的问题了。
