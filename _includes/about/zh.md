@@ -1,4 +1,4 @@
-## 我是谁
+## <button type="button" class="about-secret-button" id="about-secret-unlock">我是谁</button>
 
 25届科软毕业<br>
 至今都在失业中<br>
@@ -8,4 +8,4 @@
 正在用某个小众语言试着写游戏引擎<br>
 （感谢ai大人捏）<br>
 偶尔更新博客。。。<br>
-🍥
+<button type="button" class="about-secret-button" id="about-secret-entry" aria-label="切换顶部图片" disabled>🍥</button>

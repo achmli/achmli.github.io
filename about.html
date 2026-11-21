@@ -6,6 +6,25 @@ header-img: "img/LoneTrail.jpg"
 header-mask: 0.3
 ---
 
+<style>
+    .about-secret-button {
+        padding: 0;
+        border: 0;
+        background: none;
+        color: inherit;
+        font: inherit;
+        line-height: inherit;
+        opacity: 1;
+        touch-action: manipulation;
+        user-select: none;
+    }
+
+    .about-secret-button:focus-visible {
+        outline: 2px solid currentColor;
+        outline-offset: 4px;
+    }
+</style>
+
 <div class="post-container" lang="zh-CN">
     {% capture about_zh %}{% include about/zh.md %}{% endcapture %}
     {{ about_zh | markdownify }}
@@ -37,3 +56,29 @@ header-mask: 0.3
 </script>
 <!-- disqus 公共JS代码 end -->
 {% endif %}
+
+<script>
+    (() => {
+        const unlock = document.querySelector("#about-secret-unlock");
+        const entry = document.querySelector("#about-secret-entry");
+        const banner = document.querySelector("header.intro-header");
+        let clicks = 0;
+        let lastClick = 0;
+
+        unlock.addEventListener("click", () => {
+            const now = performance.now();
+            clicks = now - lastClick <= 700 ? clicks + 1 : 1;
+            lastClick = now;
+            if (clicks >= 3) entry.disabled = false;
+        });
+
+        entry.addEventListener("click", () => {
+            const image = new Image();
+            image.onload = () => {
+                banner.style.backgroundImage = `url("${image.src}")`;
+                banner.scrollIntoView({ block: "start" });
+            };
+            image.src = "{{ '/img/about-night.png' | relative_url }}";
+        });
+    })();
+</script>
