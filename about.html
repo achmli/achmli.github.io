@@ -62,17 +62,39 @@ header-mask: 0.3
         const unlock = document.querySelector("#about-secret-unlock");
         const entry = document.querySelector("#about-secret-entry");
         const banner = document.querySelector("header.intro-header");
+        const entryTimeout = 3000;
         let clicks = 0;
         let lastClick = 0;
+        let resetTimer;
 
-        unlock.addEventListener("click", () => {
+        function resetCommand() {
+            clearTimeout(resetTimer);
+            clicks = 0;
+            lastClick = 0;
+            entry.disabled = true;
+        }
+
+        document.addEventListener("click", (event) => {
+            if (entry.contains(event.target)) return;
+            if (!entry.disabled || !unlock.contains(event.target)) {
+                resetCommand();
+                return;
+            }
+
             const now = performance.now();
             clicks = now - lastClick <= 700 ? clicks + 1 : 1;
             lastClick = now;
-            if (clicks >= 3) entry.disabled = false;
-        });
+            if (clicks === 3) {
+                entry.disabled = false;
+                resetTimer = setTimeout(resetCommand, entryTimeout);
+            }
+        }, true);
 
         entry.addEventListener("click", () => {
+            const inTime = !entry.disabled && performance.now() - lastClick < entryTimeout;
+            resetCommand();
+            if (!inTime) return;
+
             const image = new Image();
             image.onload = () => {
                 banner.style.backgroundImage = `url("${image.src}")`;
